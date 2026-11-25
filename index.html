@@ -1,9 +1,1358 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><meta charset="UTF-8"><title>IA para la Docencia Universitaria</title></head>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IA para la Docencia Universitaria | Dr. Luis Bravo</title>
+<meta name="description" content="Portal teórico-práctico sobre inteligencia artificial para docentes, estudiantes, investigadores e instituciones. Herramientas, procesos, demos y gobernanza.">
+<meta name="theme-color" content="#14110c">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<meta property="og:title" content="IA para la Docencia Universitaria">
+<meta property="og:description" content="Herramientas, procesos, demos y gobernanza de la IA en la educación superior.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14110c; --bg2:#1a1610; --card:#201b14; --card2:#262017; --line:rgba(245,166,35,0.12); --line2:rgba(245,166,35,0.22); --line3:rgba(245,166,35,0.35);
+  --tx:#f7f3ea; --tx2:#cfc6b6; --tx3:#948a79;
+  --ac:#f5a623; --ac2:#d98a1d; --ac3:#e8c07a; --ink:#1a1208;
+  --g1:#fbe8c4; --g3:#e8c07a; --g4:#f5a623; --g5:#d4881b; --g6:#b0762a; --g7:#8f5e12;
+  --ok:#e8c07a; --warn:#f5a623; --cyan:#f3d49a;
+  --font-head:'Sora',sans-serif; --font-body:'Inter',sans-serif; --font-mono:'IBM Plex Mono',monospace;
+  --r:12px; --r2:18px;
+  --glow:0 10px 24px rgba(245,166,35,0.12); --sh:0 18px 50px rgba(20,14,4,0.55);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--tx);line-height:1.7;font-size:16px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(245,166,35,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(245,166,35,0.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+header,main,footer{position:relative;z-index:1}
+a{color:var(--ac)}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--ac);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ac);color:var(--ink);padding:8px 14px;border-radius:8px;z-index:300}
+.skip:focus{left:8px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 5%}
+@media(min-width:1300px){.wrap{padding:0 20px}}
+
+/* Header (igual a drluisbravo.com) */
+header.top{position:sticky;top:0;z-index:200;background:rgba(20,17,12,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:10px}
+.brand{font-family:var(--font-head);font-size:19px;font-weight:800;letter-spacing:-.5px;color:var(--tx);text-decoration:none;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand span{color:var(--ac)}
+.brand .sub{font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ac3);border:1px solid rgba(232,192,122,.25);background:rgba(232,192,122,.06);padding:3px 10px;border-radius:100px;margin-left:6px}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--ac);box-shadow:0 2px 6px var(--ac);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+nav.tabs{}
+.tablist{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0 12px}
+.tablist::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;background:none;border:1px solid transparent;color:var(--tx3);font:500 13px var(--font-body);letter-spacing:.01em;padding:7px 14px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:color .2s}
+.tab:hover{color:var(--tx)}
+.tab[aria-selected=true]{color:var(--ink);background:var(--ac);font-weight:600;box-shadow:0 5px 11px rgba(245,166,35,0.19)}
+
+/* Sections */
+main{min-height:70vh}
+.panel{display:none;padding:48px 0 70px;animation:fadeUp .45s ease}
+.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1{font-family:var(--font-head);font-size:clamp(34px,4vw,58px);line-height:1.06;letter-spacing:-1px;font-weight:800}
+h2{font-family:var(--font-head);font-size:clamp(24px,2.8vw,36px);letter-spacing:-1px;line-height:1.12;margin:52px 0 16px;font-weight:800}
+h3{font-family:var(--font-head);font-size:18px;margin-bottom:6px;font-weight:700;letter-spacing:-.3px;line-height:1.3}
+p.lead{color:var(--tx3);font-weight:300;font-size:clamp(16px,1.8vw,18px);max-width:820px;margin-top:16px;line-height:1.85}
+.muted{color:var(--tx3)}
+.small{font-size:14px}
+.grad{background:linear-gradient(135deg,var(--ac) 0%,#c98a2e 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-family:var(--font-mono);color:var(--ac3);background:rgba(232,192,122,.08);border:1px solid rgba(232,192,122,.25);padding:5px 14px;border-radius:100px;letter-spacing:.05em}
+.tag-sec{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-family:var(--font-mono);letter-spacing:.14em;color:var(--ac);text-transform:uppercase}
+.tag-sec::before{content:'◈';font-size:13px}
+h2 .tag-sec{display:flex;margin-bottom:8px}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:36px;align-items:center}
+.hero-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:28px;box-shadow:var(--sh)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:var(--r);font:500 15px var(--font-body);text-decoration:none;border:1px solid var(--line2);color:var(--ac);background:rgba(245,166,35,.08);cursor:pointer;transition:all .2s}
+.btn:hover{background:rgba(245,166,35,.14);border-color:var(--line3)}
+.btn.pri{background:var(--ac);border:none;color:var(--ink);font-weight:600;box-shadow:0 6px 13px rgba(245,166,35,0.22)}
+.btn.pri:hover{background:var(--ac2);transform:translateY(-1px)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:20px;text-align:center}
+.stat b{display:block;font-family:var(--font-head);font-size:34px;font-weight:800;letter-spacing:-1px}
+.stat span{font-size:12px;color:var(--tx3);font-family:var(--font-mono);letter-spacing:.06em;text-transform:uppercase}
+
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:24px;transition:all .3s}
+.card.link{text-decoration:none;color:var(--tx)}
+.card.link:hover,.card:hover{border-color:var(--line2);background:var(--card2)}
+.card.link:hover{transform:translateY(-4px);box-shadow:var(--glow),var(--sh)}
+.ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:21px;background:rgba(245,166,35,.08);border:1px solid var(--line);margin-bottom:14px}
+ul.clean{list-style:none}
+ul.clean li{padding:6px 0 6px 24px;position:relative;color:var(--tx2)}
+ul.clean li:before{content:"◈";position:absolute;left:0;color:var(--ac);font-size:12px;top:9px}
+
+
+/* Mapa de herramientas (inicio) */
+.aimap{columns:4 250px;column-gap:16px}
+.mapbox{break-inside:avoid;background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:18px 18px 12px;margin:0 0 16px;display:inline-block;width:100%}
+.mapbox h3{font-size:16px;color:var(--ac);text-align:center;margin-bottom:12px;line-height:1.25}
+.mapbox.concept{background:linear-gradient(160deg,rgba(245,166,35,.08),var(--card));border-color:var(--line2)}
+.ctag{display:inline-block;font:500 10px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:var(--ac3);padding:1px 7px;border-radius:999px;vertical-align:middle;margin-left:4px}
+.tree{list-style:none;position:relative;margin-left:8px;padding-left:18px;border-left:2px solid var(--g6)}
+.tree li{position:relative;padding:4px 0}
+.tree li::before{content:"";position:absolute;left:-18px;top:17px;width:14px;border-top:2px solid var(--g6)}
+.tree li:last-child::after{content:"";position:absolute;left:-20px;top:19px;bottom:0;width:4px;background:var(--card)}
+.mapbox.concept .tree li:last-child::after{background:transparent}
+.tree a,.tree .nolink{display:flex;align-items:flex-start;gap:9px;text-decoration:none;color:var(--tx);font-size:14px;line-height:1.35;padding:3px 6px;border-radius:8px;transition:background .2s}
+.tree a:hover{background:rgba(245,166,35,.1);color:var(--ac)}
+.mi{flex:0 0 22px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 11px var(--font-head);color:var(--ink);margin-top:1px}
+.mn small{display:block;color:var(--tx3);font-size:12px;line-height:1.4;margin-top:2px}
+
+/* Flow diagram */
+.flow{display:flex;align-items:stretch;overflow-x:auto;padding:6px 2px 12px}
+.step{flex:1 1 0;min-width:150px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;position:relative}
+.step .sn{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;font:600 13px var(--font-mono);color:var(--ink);margin-bottom:10px}
+.step b{display:block;font-family:var(--font-head);font-size:15px;margin-bottom:4px;letter-spacing:-.2px}
+.step p{font-size:13px;color:var(--tx3);line-height:1.5}
+.arrow{flex:0 0 28px;display:grid;place-items:center;color:var(--g6);font-size:18px}
+
+/* Tools + filters */
+.toolbar{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.search{width:100%;background:var(--card);border:1px solid var(--line2);color:var(--tx);padding:12px 16px 12px 42px;border-radius:var(--r);font:15px var(--font-body);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%23948a79' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3Cpath d='m13 13 4 4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:14px center}
+.search::placeholder{color:var(--tx3)}
+.search:focus{border-color:var(--ac)}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+@media(min-width:900px){.chips{flex-wrap:wrap;overflow:visible}}
+.chip{flex:0 0 auto;background:var(--card);border:1px solid var(--line2);color:var(--tx2);padding:7px 14px;border-radius:999px;font:500 13px var(--font-body);cursor:pointer;white-space:nowrap;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.chip:hover{border-color:var(--line3);color:var(--tx)}
+.chip .cnt{font:500 11px var(--font-mono);color:var(--tx3);background:rgba(255,255,255,.05);padding:1px 7px;border-radius:999px}
+.chip[aria-pressed=true]{background:var(--ac);color:var(--ink);border-color:var(--ac);font-weight:600}
+.chip[aria-pressed=true] .cnt{color:var(--ink);background:rgba(0,0,0,.12)}
+.fstatus{font:12px var(--font-mono);color:var(--tx3);letter-spacing:.04em;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.reset{background:none;border:none;color:var(--ac);font:500 12px var(--font-mono);cursor:pointer;text-decoration:underline}
+.tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:18px;display:flex;flex-direction:column;gap:8px;transition:all .3s}
+.tool:hover{border-color:var(--line2);background:var(--card2);transform:translateY(-3px);box-shadow:var(--glow)}
+.tool .th{display:flex;align-items:center;gap:12px}
+.tool .av{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font:700 14px var(--font-head);color:var(--ink);flex:0 0 40px}
+.tool h4{font-family:var(--font-head);font-size:16px;letter-spacing:-.2px;line-height:1.25}
+.tool .cat{font:11px var(--font-mono);color:var(--tx3);letter-spacing:.04em}
+.tool p{font-size:14px;color:var(--tx2);flex:1;line-height:1.6}
+.tool .ft{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;padding-top:12px;border-top:1px solid var(--line)}
+.tag{font:500 11px var(--font-mono);padding:3px 9px;border-radius:999px;letter-spacing:.03em}
+.t-free{background:rgba(232,192,122,.12);color:var(--g1)}
+.t-frm{background:rgba(245,166,35,.12);color:var(--ac)}
+.t-pay{background:rgba(176,118,42,.18);color:#d9a35c}
+.t-os{background:rgba(251,232,196,.08);color:var(--g3);border:1px solid rgba(232,192,122,.25)}
+.tool a.go{font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;color:var(--ac)}
+.tool a.go:hover{text-decoration:underline}
+.empty{color:var(--tx3);padding:28px;text-align:center;grid-column:1/-1;border:1px dashed var(--line2);border-radius:var(--r2)}
+
+/* Demo */
+.demo{background:var(--card);border:1px solid var(--line2);border-radius:var(--r2);padding:26px;box-shadow:var(--sh)}
+.demo-head{margin-bottom:12px}
+.demo-head .pill{margin-top:8px}
+.dsel{display:flex;gap:8px;margin-bottom:18px;overflow-x:auto;scrollbar-width:none}
+.dsel::-webkit-scrollbar{display:none}
+.demo-body{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.steps-list{counter-reset:s;list-style:none}
+.steps-list li{counter-increment:s;position:relative;padding:9px 0 9px 42px;color:var(--tx2);font-size:15px;border-bottom:1px dashed var(--line)}
+.steps-list li:last-child{border:none}
+.steps-list li:before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:9px;width:30px;height:28px;border-radius:8px;background:rgba(245,166,35,.1);border:1px solid var(--line2);display:grid;place-items:center;font:600 12px var(--font-mono);color:var(--ac)}
+.steps-list li b{color:var(--tx)}
+.prompt{background:#100d09;border:1px solid var(--line2);border-radius:var(--r);padding:16px;font:13.5px/1.6 var(--font-mono);color:var(--g1);white-space:pre-wrap;word-wrap:break-word}
+.plabel{font:500 11px var(--font-mono);color:var(--ac3);text-transform:uppercase;letter-spacing:.12em;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center}
+.copy{background:var(--ac);border:none;color:var(--ink);border-radius:8px;font:600 12px var(--font-body);padding:6px 12px;cursor:pointer;text-transform:none;letter-spacing:0}
+.result{margin-top:14px;background:rgba(245,166,35,.06);border:1px solid var(--line2);border-left:3px solid var(--ac);border-radius:var(--r);padding:12px 14px;font-size:14px;color:var(--tx2)}
+.result b{color:var(--ac)}
+.obj{font-size:15px;color:var(--tx2);margin-bottom:12px}
+.obj b{color:var(--tx)}
+
+.callout{border-left:3px solid var(--ac);background:var(--card);border-radius:0 12px 12px 0;padding:14px 18px;color:var(--tx2);margin-top:16px;font-size:14px}
+.callout b{color:var(--tx)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ac3);font:500 11px var(--font-mono);text-transform:uppercase;letter-spacing:.1em}
+td{color:var(--tx2)}
+td b{color:var(--tx)}
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r2);background:var(--card)}
+.risk{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.rk{border-radius:var(--r2);padding:18px;border:1px solid var(--line2)}
+.rk h4{font-family:var(--font-head);font-size:15px;margin-bottom:6px}
+.rk p{font-size:13px;color:var(--tx2)}
+
+footer{border-top:1px solid var(--line);padding:34px 0 90px;color:var(--tx3);font-size:14px;background:var(--bg2)}
+footer a{color:var(--ac3)}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+.totop{position:fixed;right:16px;bottom:16px;width:44px;height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--card2);color:var(--ac);font-size:18px;cursor:pointer;display:none;z-index:150}
+
+@media (max-width:960px){
+  .hero{grid-template-columns:1fr}
+  .g3,.g4{grid-template-columns:repeat(2,1fr)}
+  .demo-body{grid-template-columns:1fr}
+  .risk{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  body{font-size:15px}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,1fr);gap:8px}
+  .stat{padding:14px 6px}.stat b{font-size:26px}.stat span{font-size:10px}
+  .flow{flex-direction:column}
+  .arrow{transform:rotate(90deg);flex-basis:24px}
+  .step{min-width:0}
+  .brand .sub{display:none}
+  .demo{padding:18px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
 <body>
-  <h1>IA para la Docencia Universitaria</h1>
-  <p>Dr. Luis Bravo · FISI – UNMSM</p>
-  <a href="/">← Volver a drluisbravo.com</a>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#inicio" data-go="inicio" aria-label="Dr. Luis Bravo · IA Docencia, ir al inicio"><span class="logo-dot" aria-hidden="true"></span><b style="font-weight:800">Dr. Luis <span>Bravo</span></b><em class="sub" style="font-style:normal">IA Docencia</em></a>
+  </div>
+  <nav class="tabs" aria-label="Secciones">
+    <div class="wrap tablist" role="tablist" id="tablist"></div>
+  </nav>
+</header>
+
+<main id="contenido" tabindex="-1">
+
+<!-- ============ INICIO ============ -->
+<section class="panel" id="p-inicio" role="tabpanel" aria-labelledby="t-inicio">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <span class="pill">◈ Portal teórico-práctico · Educación superior</span>
+        <h1 style="margin-top:14px">Inteligencia Artificial para la <span class="grad">Docencia, el Aprendizaje y la Investigación</span></h1>
+        <p class="lead">Un espacio abierto para docentes, estudiantes, investigadores e instituciones: herramientas de IA con enlaces directos, procesos explicados con gráficos, demos guiadas paso a paso y criterios de uso ético y gobernanza.</p>
+        <div class="cta">
+          <button class="btn pri" data-go="docentes">Empezar como docente</button>
+          <button class="btn" data-go="favoritos">Claude, Gemini y ChatGPT</button>
+          <button class="btn" data-go="investigadores">Soy investigador</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>¿Cómo usar este portal?</h3>
+        <ul class="clean small">
+          <li><b>Elige tu perfil</b> en las pestañas superiores.</li>
+          <li><b>Lee el proceso</b>: cada sección tiene un gráfico del flujo de trabajo.</li>
+          <li><b>Explora las herramientas</b>: búscalas y fíltralas por categoría.</li>
+          <li><b>Practica con la demo</b>: copia el prompt y sigue los pasos.</li>
+          <li><b>Revisa la gobernanza</b> antes de aplicar IA con estudiantes o datos.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b class="grad" id="n-tools">0</b><span>herramientas de IA</span></div>
+      <div class="stat"><b class="grad" id="n-areas">0</b><span>perfiles y áreas</span></div>
+      <div class="stat"><b class="grad" id="n-demos">0</b><span>demos guiadas</span></div>
+    </div>
+
+    <div id="mapWrap"></div>
+
+    <h2>Explora por perfil</h2>
+    <div class="grid g3" id="profileCards"></div>
+
+    <h2>El ciclo de uso responsable de la IA</h2>
+    <p class="muted" style="margin-bottom:14px">Todas las demos de este portal siguen el mismo ciclo. La IA asiste, pero la persona decide, verifica y se responsabiliza.</p>
+    <div class="flow" data-flow="general"></div>
+  </div>
+</section>
+
+<!-- ============ DYNAMIC TOPIC PANELS ============ -->
+<div id="topicPanels"></div>
+
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <b style="color:var(--tx)">IA Docencia</b> · Elaborado por <a href="/">Dr. Luis Bravo</a><br>
+      Portal teórico-práctico de IA para docentes, estudiantes, investigadores e instituciones
+    </div>
+    <div class="small" style="max-width:520px">Las herramientas cambian con frecuencia: verifica precios, términos de uso y privacidad antes de usarlas con datos de estudiantes. Las marcas mencionadas pertenecen a sus respectivos titulares.</div>
+  </div>
+</footer>
+
+<button class="totop" id="totop" aria-label="Volver arriba">↑</button>
+
+<script>
+/* ================= DATA ================= */
+const TABS=[
+ {id:"inicio",label:"Inicio",ico:"🏠"},
+ {id:"favoritos",label:"LLM favoritos",ico:"⭐"},
+ {id:"docentes",label:"IA para docentes",ico:"👩‍🏫"},
+ {id:"alumnos",label:"Alumnos",ico:"🧑‍🎓"},
+ {id:"investigadores",label:"Investigadores",ico:"🔬"},
+ {id:"aprendizaje",label:"Aprendizaje y gamificación",ico:"🧠"},
+ {id:"conocimiento",label:"Gestión del conocimiento",ico:"🗂️"},
+ {id:"automatizacion",label:"Automatización",ico:"⚙️"},
+ {id:"ml",label:"Machine learning sin programar",ico:"🤖"},
+ {id:"publicar",label:"Publicar artefacto web",ico:"🌐"},
+ {id:"publicidad",label:"Publicidad",ico:"📣"},
+ {id:"gobernanza",label:"Gobernanza",ico:"⚖️"},
+ {id:"errores",label:"Errores al implementar IA",ico:"⚠️"}
+];
+
+
+const GENERAL_FLOW=[
+ ["Definir","Objetivo pedagógico o de investigación, y contexto."],
+ ["Elegir","La herramienta adecuada y revisar su privacidad."],
+ ["Instruir","Prompt con rol, tarea, contexto, formato y criterios."],
+ ["Verificar","Contrastar con fuentes, corregir sesgos y errores."],
+ ["Adaptar","Ajustar al grupo, la disciplina y la accesibilidad."],
+ ["Declarar","Transparencia: indicar cómo se usó la IA."]
+];
+
+/* Tool: [name, url, category, summary, pricing(free|frm|pay|os)] */
+const TOPICS={
+ docentes:{
+  ico:"👩‍🏫",color:"#5b8cff",
+  title:"IA para <span class='grad'>docentes</span>",
+  lead:"Cómo usar la IA para planificar, crear recursos educativos, evaluar, dar retroalimentación y analizar la información de los estudiantes, sin perder el criterio pedagógico.",
+  theory:[
+   ["🧑‍🏫","El docente como diseñador","La IA acelera la producción de borradores, pero el docente define resultados de aprendizaje, valida contenidos y contextualiza."],
+   ["📐","Prompting pedagógico","Un buen prompt incluye rol, nivel educativo, competencia, contexto, formato de salida y criterios de calidad (modelo RTCF)."],
+   ["📊","Evaluación aumentada","Rúbricas, bancos de preguntas y retroalimentación formativa con IA; las decisiones de calificación siguen siendo humanas."],
+   ["🔐","Datos de estudiantes","Anonimiza antes de subir información, usa cuentas institucionales y evita cargar datos personales sensibles."]
+  ],
+  flowTitle:"Proceso: diseño de una sesión de aprendizaje con IA",
+  flow:[["Resultado de aprendizaje","Define la competencia y la evidencia esperada."],["Generar borrador","Secuencia didáctica y materiales con IA."],["Crear recursos","Presentación, lectura adaptada, imágenes y video."],["Evaluar","Cuestionario y rúbrica alineados."],["Analizar datos","Resultados del grupo y retroalimentación."],["Mejorar","Ajustar la siguiente sesión con evidencia."]],
+  cats:["Asistentes generales","Creación de recursos","Presentaciones y visuales","Evaluación y retroalimentación","Analítica de datos"],
+  tools:[
+   ["ChatGPT","https://chatgpt.com","Asistentes generales","Asistente conversacional para planificar sesiones, redactar casos, generar ejemplos y crear GPTs personalizados para un curso.","frm"],
+   ["Google Gemini","https://gemini.google.com","Asistentes generales","Asistente de Google integrado a Docs, Classroom y Drive; permite crear Gems (asistentes con instrucciones fijas).","frm"],
+   ["Microsoft Copilot","https://copilot.microsoft.com","Asistentes generales","Asistente integrado a Word, PowerPoint, Excel y Teams; útil con cuentas institucionales de Microsoft 365.","frm"],
+   ["Claude","https://claude.ai","Asistentes generales","Asistente con buena redacción y análisis de documentos largos; útil para sílabos, rúbricas y retroalimentación extensa.","frm"],
+   ["NotebookLM","https://notebooklm.google.com","Creación de recursos","Trabaja solo con tus fuentes (PDF, web, video): genera guías de estudio, preguntas frecuentes, mapas mentales y resúmenes en audio.","free"],
+   ["MagicSchool","https://www.magicschool.ai","Creación de recursos","Decenas de herramientas para docentes: planes de clase, rúbricas, adaptación de textos, retroalimentación y más.","frm"],
+   ["Brisk Teaching","https://www.briskteaching.com","Creación de recursos","Extensión de Chrome que crea cuestionarios, nivela lecturas y comenta trabajos directamente en Google Docs.","frm"],
+   ["Diffit","https://web.diffit.me","Creación de recursos","Adapta cualquier texto o tema a distintos niveles de lectura y genera actividades listas para usar.","frm"],
+   ["Eduaide.Ai","https://www.eduaide.ai","Creación de recursos","Generador de recursos y actividades didácticas con banco de estrategias pedagógicas.","frm"],
+   ["Gamma","https://gamma.app","Presentaciones y visuales","Crea presentaciones, documentos y páginas web a partir de un esquema o un texto.","frm"],
+   ["Canva Magic Studio","https://www.canva.com","Presentaciones y visuales","Diseño con IA: presentaciones, infografías, imágenes, video y material gráfico de clase.","frm"],
+   ["Napkin AI","https://www.napkin.ai","Presentaciones y visuales","Convierte un texto en diagramas e infografías editables.","frm"],
+   ["Genially","https://genially.com","Presentaciones y visuales","Contenidos interactivos y gamificados (escape rooms, presentaciones) con asistente de IA.","frm"],
+   ["HeyGen","https://www.heygen.com","Presentaciones y visuales","Videos con avatar y doblaje a otros idiomas para microlecciones.","frm"],
+   ["Wayground (ex Quizizz)","https://wayground.com","Evaluación y retroalimentación","Genera cuestionarios y lecciones interactivas a partir de un PDF, un video o un tema.","frm"],
+   ["Kahoot!","https://kahoot.com","Evaluación y retroalimentación","Cuestionarios gamificados con generador de preguntas por IA.","frm"],
+   ["Curipod","https://curipod.com","Evaluación y retroalimentación","Lecciones interactivas con votaciones, dibujos y retroalimentación de IA a las respuestas.","frm"],
+   ["Gradescope","https://www.gradescope.com","Evaluación y retroalimentación","Calificación asistida de exámenes y tareas, con agrupación de respuestas similares y rúbricas.","pay"],
+   ["Turnitin","https://www.turnitin.com","Evaluación y retroalimentación","Similitud de textos e indicadores de escritura con IA (úsalos como alerta, no como prueba).","pay"],
+   ["Julius AI","https://julius.ai","Analítica de datos","Analiza hojas de cálculo con lenguaje natural: estadísticas, gráficos y tendencias de notas.","frm"],
+   ["Looker Studio","https://lookerstudio.google.com","Analítica de datos","Tableros gratuitos de desempeño estudiantil conectados a Google Sheets o Forms.","free"],
+   ["Power BI","https://www.microsoft.com/power-platform/products/power-bi","Analítica de datos","Tableros con Copilot para preguntas en lenguaje natural sobre los datos académicos.","frm"]
+  ],
+  demos:[
+   {t:"Crear una sesión y su rúbrica",tool:"ChatGPT / Gemini / Claude",obj:"Obtener en 15 minutos una secuencia didáctica de 90 minutos con actividades activas y una rúbrica analítica alineada.",
+    steps:["Abre el asistente con tu cuenta institucional.","Copia el prompt y <b>reemplaza lo que está entre corchetes</b>.","Revisa que la secuencia tenga inicio, desarrollo y cierre, y tiempos realistas.","Pide ajustes: «haz la actividad 2 más colaborativa» o «agrega una variante accesible».","Solicita la rúbrica y verifica que cada criterio mida el resultado de aprendizaje.","Exporta a Docs o Word y <b>valida el contenido disciplinar</b> antes de usarlo."],
+    prompt:"Actúa como diseñador instruccional universitario.\nCurso: [nombre del curso], ciclo [X], carrera [carrera].\nResultado de aprendizaje: [el estudiante será capaz de...].\nDiseña una sesión de 90 minutos con metodología activa (aprendizaje basado en problemas).\nIncluye: inicio (motivación), desarrollo (2 actividades colaborativas), cierre (metacognición), tiempos y materiales.\nLuego crea una rúbrica analítica con 4 criterios y 4 niveles de logro en tabla.\nUsa ejemplos del contexto peruano.",
+    res:"Secuencia didáctica con tiempos y materiales, y una rúbrica de 4×4 lista para adaptar."},
+   {t:"Analizar el rendimiento de un grupo",tool:"Julius AI / Copilot en Excel / ChatGPT (análisis de datos)",obj:"Identificar temas con bajo desempeño y estudiantes que necesitan acompañamiento a partir de un registro de notas anonimizado.",
+    steps:["Exporta tus notas a Excel o CSV.","<b>Anonimiza</b>: reemplaza nombres por códigos (E01, E02…).","Sube el archivo al asistente de análisis de datos.","Pega el prompt y pide gráficos simples.","Contrasta los resultados con lo que observaste en clase.","Define acciones: reforzamiento, tutoría y ajuste de la evaluación."],
+    prompt:"Analiza este registro anonimizado de notas (escala 0-20).\n1) Calcula promedio, mediana y desviación estándar por evaluación.\n2) Identifica las preguntas o temas con menor rendimiento.\n3) Agrupa a los estudiantes en 3 niveles (logro, en proceso, en riesgo) según criterios que expliques.\n4) Genera un gráfico de barras por tema y un histograma de notas finales.\n5) Propón 3 acciones pedagógicas concretas para el grupo en riesgo.",
+    res:"Resumen estadístico, gráficos, grupos de riesgo y acciones de mejora basadas en evidencia."}
+  ]
+ },
+ alumnos:{
+  ico:"🧑‍🎓",color:"#22d3ee",
+  title:"IA para <span class='grad'>estudiantes</span> y tesistas",
+  lead:"Herramientas para aprender mejor, buscar literatura confiable, organizar referencias, redactar con integridad y avanzar en la tesis con la IA como tutor, no como autor.",
+  theory:[
+   ["🧭","IA como tutor","Pide explicaciones, ejemplos y preguntas de práctica. No delegues el pensamiento: tú decides y argumentas."],
+   ["📚","Fuentes verificables","Usa buscadores académicos con IA que citan artículos reales y verifica siempre el DOI y el texto original."],
+   ["✍️","Autoría e integridad","Declara el uso de IA según el reglamento de tu universidad. Parafrasear con IA sin entender no es aprender."],
+   ["🗃️","Gestor de referencias","Zotero o Mendeley desde el primer día: evitarás citas inventadas y ahorrarás horas en el formato."]
+  ],
+  flowTitle:"Proceso: elaboración de la tesis asistida por IA",
+  flow:[["Tema y problema","Lluvia de ideas y delimitación con IA."],["Búsqueda","Literatura en Consensus, Elicit y Scopus."],["Organizar","Zotero con fichas y matriz de consistencia."],["Marco teórico","Síntesis con NotebookLM a partir de tus fuentes."],["Método y datos","Análisis estadístico asistido (JASP, Colab)."],["Redacción","Corrección de estilo y declaración del uso de IA."]],
+  cats:["Tutoría y estudio","Búsqueda académica","Referencias","Redacción","Datos y estadística"],
+  tools:[
+   ["NotebookLM","https://notebooklm.google.com","Tutoría y estudio","Sube tus lecturas y pregunta sobre ellas. Genera guías, cuestionarios y podcasts de repaso con citas a tus fuentes.","free"],
+   ["ChatGPT (modo estudio)","https://chatgpt.com","Tutoría y estudio","Guía paso a paso con preguntas socráticas en lugar de dar la respuesta directa.","frm"],
+   ["Gemini (aprendizaje guiado)","https://gemini.google.com","Tutoría y estudio","Explicaciones por etapas con preguntas de comprobación, imágenes y videos.","frm"],
+   ["Khanmigo","https://www.khanmigo.ai","Tutoría y estudio","Tutor de Khan Academy que guía sin dar la solución directa, sobre todo en matemáticas y ciencias.","frm"],
+   ["Quizlet","https://quizlet.com","Tutoría y estudio","Tarjetas y pruebas de práctica generadas a partir de tus apuntes.","frm"],
+   ["Perplexity","https://www.perplexity.ai","Búsqueda académica","Buscador conversacional con citas; filtra por fuentes académicas.","frm"],
+   ["Consensus","https://consensus.app","Búsqueda académica","Responde preguntas de investigación con evidencia de artículos científicos y un medidor de consenso.","frm"],
+   ["Elicit","https://elicit.com","Búsqueda académica","Encuentra artículos, extrae datos clave en tabla y resume hallazgos.","frm"],
+   ["Semantic Scholar","https://www.semanticscholar.org","Búsqueda académica","Buscador académico gratuito con resúmenes TL;DR y redes de citas.","free"],
+   ["Google Scholar","https://scholar.google.com","Búsqueda académica","Buscador académico de referencia para verificar citas y encontrar PDFs.","free"],
+   ["Zotero","https://www.zotero.org","Referencias","Gestor de referencias libre: captura, organiza y cita en APA, Vancouver o IEEE desde Word y Docs.","os"],
+   ["Mendeley","https://www.mendeley.com","Referencias","Gestor de referencias de Elsevier con lector de PDF y anotaciones.","free"],
+   ["Grammarly","https://www.grammarly.com","Redacción","Corrección gramatical y de estilo, sobre todo en inglés.","frm"],
+   ["LanguageTool","https://languagetool.org/es","Redacción","Corrector de gramática y estilo en español y otros idiomas.","frm"],
+   ["DeepL","https://www.deepl.com","Redacción","Traducción de alta calidad y DeepL Write para mejorar textos.","frm"],
+   ["QuillBot","https://quillbot.com","Redacción","Parafraseo y resumen. Úsalo para aprender a reformular, siempre citando la fuente original.","frm"],
+   ["JASP","https://jasp-stats.org","Datos y estadística","Software estadístico libre y amigable (alternativa a SPSS) con resultados en formato APA.","os"],
+   ["Google Colab","https://colab.research.google.com","Datos y estadística","Notebooks de Python en la nube con asistente Gemini para generar y explicar código.","free"]
+  ],
+  demos:[
+   {t:"De un tema a la matriz de consistencia",tool:"ChatGPT / Gemini / Claude",obj:"Delimitar un tema de tesis y obtener un borrador de matriz de consistencia para discutir con el asesor.",
+    steps:["Escribe tu tema general y tu carrera en el prompt.","Pide 3 problemas posibles y elige uno con tu asesor.","Solicita la matriz (problema, objetivos, hipótesis, variables, método).","Verifica que cada objetivo sea medible (usa verbos de Bloom).","Busca 5 antecedentes <b>reales</b> en Consensus o Scopus que respalden el problema.","Guarda la conversación como evidencia de tu proceso y declárala."],
+    prompt:"Soy estudiante de [carrera] y quiero investigar sobre [tema general] en [contexto/lugar].\n1) Propón 3 problemas de investigación viables para una tesis de [pregrado/maestría], con su justificación.\n2) Para el problema [N], elabora una matriz de consistencia en tabla: problema general y específicos, objetivos, hipótesis, variables y dimensiones, tipo y diseño de investigación, población y muestra, técnicas e instrumentos.\n3) Indica qué palabras clave en inglés debo usar para buscar antecedentes en Scopus.\nNo inventes referencias.",
+    res:"Tres problemas candidatos, la matriz de consistencia del elegido y palabras clave para la búsqueda."},
+   {t:"Estudiar un artículo con NotebookLM",tool:"NotebookLM",obj:"Comprender a fondo 3 a 5 artículos base del marco teórico y generar fichas de lectura citadas.",
+    steps:["Entra a notebooklm.google.com con tu cuenta Google.","Crea un cuaderno y sube los PDFs de tus artículos.","Pide una guía de estudio y un mapa mental.","Haz preguntas: cada respuesta cita el fragmento de tu fuente.","Genera el resumen en audio para repasar.","Copia los hallazgos a tus fichas de Zotero con la cita correcta."],
+    prompt:"Con base solo en las fuentes cargadas:\n1) Elabora una ficha por artículo: autor/año, objetivo, método, muestra, resultados principales y limitaciones.\n2) Compara los artículos en una tabla.\n3) Identifica 3 vacíos de investigación que justifiquen mi estudio sobre [tema].",
+    res:"Fichas de lectura con citas a las fuentes, una tabla comparativa y vacíos de investigación."}
+  ]
+ },
+ investigadores:{
+  ico:"🔬",color:"#7c5cff",
+  title:"IA para <span class='grad'>investigadores científicos</span>",
+  lead:"Herramientas y metodologías basadas en IA para escribir artículos originales y revisiones sistemáticas: búsqueda semántica, cribado, extracción de datos, bibliometría, redacción y selección de revista, con integridad científica.",
+  theory:[
+   ["🧪","Artículo original (IMRyD)","La IA apoya la búsqueda, el análisis de datos y la redacción. Diseño, resultados e interpretación son responsabilidad del autor."],
+   ["📑","Revisión sistemática (PRISMA 2020)","Pregunta PICO/PEO, protocolo, búsqueda reproducible, cribado por pares, extracción, riesgo de sesgo y síntesis."],
+   ["📈","Bibliometría","Mapas de coautoría, co-citación y palabras clave con VOSviewer o Bibliometrix sobre exportaciones de Scopus o WoS."],
+   ["🛡️","Integridad","La IA no puede ser autora (COPE). Declara su uso en métodos o agradecimientos según la política de la revista."]
+  ],
+  flowTitle:"Proceso: revisión sistemática asistida por IA (PRISMA 2020)",
+  flow:[["Pregunta PICO","Definir criterios de elegibilidad y protocolo."],["Búsqueda","Ecuación booleana en Scopus, WoS y PubMed; IA semántica como complemento."],["Cribado","Rayyan o ASReview con doble revisor."],["Extracción","Elicit o SciSpace para tablas de datos."],["Síntesis","Bibliometría, meta-análisis y narrativa."],["Reporte","Diagrama PRISMA, redacción y declaración del uso de IA."]],
+  cats:["Búsqueda semántica","Mapas de literatura","Revisiones sistemáticas","Bibliometría","Redacción y publicación"],
+  tools:[
+   ["Elicit","https://elicit.com","Búsqueda semántica","Busca en más de 125 millones de artículos, extrae datos en columnas y apoya revisiones sistemáticas.","frm"],
+   ["Consensus","https://consensus.app","Búsqueda semántica","Respuestas basadas en evidencia con citas y nivel de consenso científico.","frm"],
+   ["SciSpace","https://scispace.com","Búsqueda semántica","Lee, explica y extrae información de PDFs; revisión de literatura asistida.","frm"],
+   ["Scopus AI","https://www.elsevier.com/products/scopus/scopus-ai","Búsqueda semántica","Resúmenes con IA sobre la base Scopus, con referencias verificables (requiere suscripción institucional).","pay"],
+   ["Undermind","https://www.undermind.ai","Búsqueda semántica","Agente de búsqueda profunda que encuentra literatura altamente específica.","frm"],
+   ["OpenAlex","https://openalex.org","Búsqueda semántica","Catálogo abierto de la producción científica mundial con API gratuita.","free"],
+   ["ResearchRabbit","https://www.researchrabbit.ai","Mapas de literatura","Descubre artículos relacionados y visualiza redes de autores y citas.","frm"],
+   ["Connected Papers","https://www.connectedpapers.com","Mapas de literatura","Grafo visual de artículos similares a partir de un artículo semilla.","frm"],
+   ["Litmaps","https://www.litmaps.com","Mapas de literatura","Mapas de citación y alertas de nuevas publicaciones.","frm"],
+   ["scite","https://scite.ai","Mapas de literatura","Muestra si una cita apoya, contrasta o solo menciona un hallazgo.","pay"],
+   ["Rayyan","https://www.rayyan.ai","Revisiones sistemáticas","Cribado colaborativo de títulos y resúmenes, ciego entre revisores, con priorización por IA.","frm"],
+   ["ASReview","https://asreview.nl","Revisiones sistemáticas","Software libre de aprendizaje activo que prioriza los artículos relevantes en el cribado.","os"],
+   ["Covidence","https://www.covidence.org","Revisiones sistemáticas","Gestión completa de revisiones sistemáticas: cribado, extracción y riesgo de sesgo.","pay"],
+   ["PRISMA 2020","https://www.prisma-statement.org","Revisiones sistemáticas","Guía de reporte, lista de verificación y plantillas del diagrama de flujo.","free"],
+   ["VOSviewer","https://www.vosviewer.com","Bibliometría","Mapas bibliométricos de coautoría, co-citación y co-ocurrencia de palabras.","free"],
+   ["Bibliometrix / Biblioshiny","https://www.bibliometrix.org","Bibliometría","Paquete de R con interfaz web para análisis bibliométrico completo.","os"],
+   ["Paperpal","https://paperpal.com","Redacción y publicación","Corrección académica en inglés y verificaciones previas al envío.","frm"],
+   ["Writefull","https://www.writefull.com","Redacción y publicación","Revisión del lenguaje académico entrenada con artículos publicados; integra Overleaf.","frm"],
+   ["Overleaf","https://www.overleaf.com","Redacción y publicación","Editor LaTeX colaborativo con plantillas de revistas y asistente de IA.","frm"],
+   ["JANE","https://jane.biosemantics.org","Redacción y publicación","Sugiere revistas y autores afines a partir de tu título y resumen.","free"]
+  ],
+  demos:[
+   {t:"Construir la ecuación de búsqueda",tool:"ChatGPT / Claude + Scopus",obj:"Pasar de una pregunta de investigación a una ecuación booleana reproducible para Scopus.",
+    steps:["Formula tu pregunta en formato PICO o PEO.","Pide al asistente sinónimos, términos MeSH o tesauro y la ecuación.","Pega la ecuación en Scopus (Advanced search).","Revisa los primeros 50 resultados: ¿son pertinentes? Ajusta los términos.","Registra la fecha, la base, la ecuación y el número de resultados (reproducibilidad).","Exporta en CSV o BibTeX para Rayyan y en formato completo para VOSviewer."],
+    prompt:"Mi pregunta de investigación es: [pregunta].\nP (población): [ ], I/E (intervención o exposición): [ ], C: [ ], O (resultado): [ ].\n1) Lista sinónimos y variantes en inglés por cada componente (incluye truncamientos con *).\n2) Construye una ecuación para Scopus usando TITLE-ABS-KEY, operadores AND/OR y comillas para frases.\n3) Sugiere filtros: años [rango], tipo de documento y área.\n4) Adapta la ecuación a Web of Science y PubMed.",
+    res:"Ecuaciones de búsqueda listas para Scopus, WoS y PubMed, y un registro reproducible."},
+   {t:"Cribado y extracción para una revisión",tool:"Rayyan + Elicit",obj:"Cribar cientos de registros y extraer datos clave en una tabla de evidencia.",
+    steps:["Importa los registros exportados (RIS o CSV) en Rayyan y elimina duplicados.","Activa el modo ciego e invita a un segundo revisor.","Etiqueta incluir o excluir según los criterios; Rayyan aprende y prioriza.","Resuelve los conflictos y anota los motivos de exclusión (para el diagrama PRISMA).","Sube los PDFs incluidos a Elicit y define columnas: diseño, muestra, intervención y resultados.","<b>Verifica cada celda</b> contra el texto del artículo antes de sintetizar."],
+    prompt:"Columnas sugeridas para Elicit o SciSpace:\n- País y contexto\n- Diseño del estudio\n- Tamaño de muestra\n- Herramienta o modelo de IA utilizado\n- Variable resultado y cómo se midió\n- Hallazgo principal (con dato numérico)\n- Limitaciones declaradas\n- Riesgo de sesgo (según la herramienta: RoB 2, ROBINS-I, CASP)",
+    res:"Tabla de extracción por estudio y conteos para el diagrama de flujo PRISMA 2020."}
+  ]
+ },
+ gobernanza:{
+  ico:"⚖️",color:"#f59e0b",
+  title:"Gobernanza de la <span class='grad'>IA en la institución</span>",
+  lead:"Criterios, normas y marcos para administrar políticas de IA en universidades y organizaciones: principios éticos, gestión de riesgos, roles y responsabilidades, transparencia e integridad académica.",
+  theory:[
+   ["🇵🇪","Marco peruano","La Ley N.º 31814 promueve el uso de la IA. Su reglamento (D. S. N.º 115-2025-PCM) clasifica riesgos y fija obligaciones de transparencia y supervisión humana."],
+   ["🌐","Referentes internacionales","Recomendación de la UNESCO sobre la ética de la IA, guía de IA generativa en educación e investigación, principios de la OCDE y la Ley de IA de la UE."],
+   ["🧭","Gestión de riesgos","NIST AI RMF (gobernar, mapear, medir, gestionar) e ISO/IEC 42001 (sistema de gestión de IA) aplicados a la universidad."],
+   ["🏛️","Política institucional","Guía de uso, niveles de uso permitido por actividad, declaración de uso de IA, comité y catálogo de herramientas aprobadas."]
+  ],
+  flowTitle:"Proceso: implementar una política institucional de IA",
+  flow:[["Diagnóstico","Inventario de usos, herramientas y riesgos actuales."],["Principios","Ética, equidad, privacidad, transparencia y supervisión humana."],["Normativa","Guía, niveles de uso, declaración y sanciones."],["Roles","Comité de IA, oficial de IA, docentes y estudiantes."],["Capacitar","Alfabetización en IA para toda la comunidad."],["Monitorear","Indicadores, auditoría y actualización anual."]],
+  cats:["Normativa peruana","Marcos internacionales","Gestión de riesgos","Integridad académica"],
+  tools:[
+   ["Ley N.º 31814 y reglamento","https://www.gob.pe/institucion/pcm/normas-legales/7133522-115-2025-pcm","Normativa peruana","D. S. N.º 115-2025-PCM, publicado el 9 de setiembre de 2025: reglamenta el uso de IA en entidades públicas, privadas y la academia.","free"],
+   ["Gob.pe: reglamento de IA","https://www.gob.pe/110224-conoce-el-reglamento-de-la-ley-de-inteligencia-artificial-en-el-peru","Normativa peruana","Explicación oficial y ciudadana del reglamento de la ley de IA en el Perú.","free"],
+   ["UNESCO: Ética de la IA","https://www.unesco.org/es/artificial-intelligence/recommendation-ethics","Marcos internacionales","Recomendación global sobre la ética de la IA (2021): valores, principios y áreas de política.","free"],
+   ["UNESCO: IA generativa en educación","https://www.unesco.org/es/articles/guia-para-el-uso-de-ia-generativa-en-educacion-e-investigacion","Marcos internacionales","Guía para el uso de la IA generativa en educación e investigación (2023).","free"],
+   ["UNESCO: Competencias en IA para docentes","https://www.unesco.org/en/articles/ai-competency-framework-teachers","Marcos internacionales","Marco de competencias en IA para docentes y para estudiantes (2024).","free"],
+   ["Principios de IA de la OCDE","https://oecd.ai/en/ai-principles","Marcos internacionales","Principios para una IA confiable adoptados por más de 40 países.","free"],
+   ["EU AI Act Explorer","https://artificialintelligenceact.eu","Marcos internacionales","Texto y explorador de la Ley de IA de la UE: la educación aparece como ámbito de alto riesgo.","free"],
+   ["NIST AI RMF","https://www.nist.gov/itl/ai-risk-management-framework","Gestión de riesgos","Marco de gestión de riesgos de IA: Govern, Map, Measure, Manage, con playbook práctico.","free"],
+   ["ISO/IEC 42001","https://www.iso.org/standard/42001","Gestión de riesgos","Norma certificable para sistemas de gestión de IA en organizaciones.","pay"],
+   ["AI Incident Database","https://incidentdatabase.ai","Gestión de riesgos","Base de incidentes reales de IA para aprender de los fallos y diseñar controles.","free"],
+   ["COPE: Autoría e IA","https://publicationethics.org/guidance/cope-position/authorship-and-ai-tools","Integridad académica","Posición del Comité de Ética en Publicación: la IA no puede ser autora y su uso debe declararse.","free"],
+   ["AI Assessment Scale (AIAS)","https://aiassessmentscale.com","Integridad académica","Escala de 5 niveles para definir cuánta IA se permite en cada evaluación.","free"]
+  ],
+  demos:[
+   {t:"Redactar una guía de uso de IA para tu facultad",tool:"Claude / ChatGPT / Gemini",obj:"Obtener un borrador de lineamientos institucionales alineado con la Ley N.º 31814, la UNESCO y la integridad académica.",
+    steps:["Reúne los documentos base (reglamento, guía UNMSM, reglamento de grados) y súbelos en PDF.","Pega el prompt indicando tu facultad y su alcance.","Revisa que el borrador incluya niveles de uso, declaración y responsabilidades.","Valídalo con el área legal y académica; ajusta la redacción normativa.","Somételo a consulta con docentes y estudiantes.","Aprueba, difunde y define una fecha de revisión anual."],
+    prompt:"Actúa como especialista en gobernanza de IA en educación superior.\nCon base en los documentos adjuntos (Ley N.º 31814 y su reglamento, guía institucional), redacta un borrador de «Lineamientos para el uso de IA generativa» para la [Facultad/Universidad] con:\n1) Objeto, alcance y definiciones.\n2) Principios (supervisión humana, transparencia, privacidad, equidad, integridad).\n3) Niveles de uso permitido en evaluaciones (escala de 0 a 4) con ejemplos.\n4) Modelo de declaración de uso de IA para tesis y trabajos.\n5) Roles: comité, docentes, estudiantes y personal administrativo.\n6) Herramientas aprobadas y criterios de protección de datos.\n7) Monitoreo e indicadores.\nUsa redacción normativa y señala qué debe validar el área legal.",
+    res:"Borrador estructurado de lineamientos listo para la validación legal y académica."},
+   {t:"Matriz de riesgos de un uso de IA",tool:"Hoja de cálculo + asistente de IA",obj:"Evaluar el riesgo de un caso concreto (por ejemplo, un chatbot de tutoría o la calificación automática) antes de implementarlo.",
+    steps:["Describe el caso de uso: quién lo usa, con qué datos y qué decisiones apoya.","Pide al asistente identificar riesgos por categoría (ver la matriz de abajo).","Estima la probabilidad y el impacto (1–5) con tu equipo, no solo con la IA.","Define controles: supervisión humana, anonimización, pruebas de sesgo.","Asigna responsables y fechas.","Documenta y revisa después del piloto."],
+    prompt:"Caso de uso: [describe el sistema de IA, los usuarios, los datos y las decisiones que apoya].\nIdentifica riesgos en: privacidad, sesgo y equidad, exactitud y alucinaciones, integridad académica, seguridad, dependencia tecnológica y cumplimiento normativo (Ley N.º 31814).\nEntrega una tabla: riesgo | causa | probabilidad (1-5) | impacto (1-5) | nivel | control propuesto | responsable.\nClasifica el caso según los niveles de riesgo del reglamento peruano y justifica.",
+    res:"Matriz de riesgos con controles y responsables, y la clasificación preliminar del caso."}
+  ],
+  extra:"risk"
+ },
+ aprendizaje:{
+  ico:"🧠",color:"#22c55e",
+  title:"IA en el <span class='grad'>aprendizaje y la gamificación</span>",
+  lead:"Aprendizaje personalizado y adaptativo: tutores inteligentes, práctica espaciada, retroalimentación inmediata, accesibilidad y diseño de experiencias en las que la IA potencia, y no reemplaza, el esfuerzo cognitivo.",
+  theory:[
+   ["🎯","Aprendizaje adaptativo","Ajusta el contenido, el ritmo y la dificultad según el desempeño del estudiante (zona de desarrollo próximo)."],
+   ["🔁","Práctica de recuperación","Preguntas generadas por IA más repetición espaciada: dos estrategias con fuerte evidencia en ciencias cognitivas."],
+   ["🗣️","Tutoría socrática","La IA pregunta en lugar de responder y promueve el razonamiento y la metacognición."],
+   ["♿","Accesibilidad (DUA)","Texto a voz, subtítulos, lectura fácil y traducción para múltiples formas de representación."]
+  ],
+  flowTitle:"Proceso: ciclo de aprendizaje personalizado con IA",
+  flow:[["Diagnóstico","Prueba de entrada con IA para detectar saberes previos."],["Ruta","Contenidos y nivel adaptados a cada estudiante."],["Práctica","Ejercicios y tutor socrático."],["Retroalimentación","Inmediata, específica y formativa."],["Repaso espaciado","Tarjetas y cuestionarios programados."],["Metacognición","Reflexión: qué aprendí y cómo."]],
+  cats:["Tutores inteligentes","Práctica y memoria","Idiomas","Accesibilidad","Experiencias inmersivas"],
+  tools:[
+   ["Khanmigo","https://www.khanmigo.ai","Tutores inteligentes","Tutor socrático de Khan Academy que guía el razonamiento sin dar respuestas.","frm"],
+   ["ChatGPT (modo estudio)","https://chatgpt.com","Tutores inteligentes","Modo de aprendizaje guiado con preguntas y comprobaciones de comprensión.","frm"],
+   ["Gemini (aprendizaje guiado)","https://gemini.google.com","Tutores inteligentes","Explicaciones paso a paso con apoyo visual y preguntas de práctica.","frm"],
+   ["NotebookLM","https://notebooklm.google.com","Tutores inteligentes","Tutor basado solo en los materiales del curso, con audio, mapas mentales y cuestionarios.","free"],
+   ["Wolfram|Alpha","https://www.wolframalpha.com","Tutores inteligentes","Motor computacional con soluciones paso a paso en matemáticas y ciencias.","frm"],
+   ["Anki","https://apps.ankiweb.net","Práctica y memoria","Tarjetas con repetición espaciada (libre); combínalas con tarjetas generadas por IA.","os"],
+   ["Quizlet","https://quizlet.com","Práctica y memoria","Sets de estudio y pruebas de práctica generadas a partir de apuntes.","frm"],
+   ["Wayground (ex Quizizz)","https://wayground.com","Práctica y memoria","Práctica adaptativa y gamificada con informes por estudiante.","frm"],
+   ["Duolingo","https://www.duolingo.com","Idiomas","Aprendizaje de idiomas adaptativo con práctica de conversación por IA.","frm"],
+   ["Speak","https://www.speak.com","Idiomas","Práctica oral de idiomas con un tutor de voz de IA.","pay"],
+   ["Microsoft Lector inmersivo","https://www.onenote.com/learningtools","Accesibilidad","Lectura en voz alta, foco de línea y traducción para apoyar la comprensión lectora.","free"],
+   ["Be My Eyes","https://www.bemyeyes.com","Accesibilidad","Descripción de imágenes con IA para personas con discapacidad visual.","free"],
+   ["Otter.ai","https://otter.ai","Accesibilidad","Transcripción y resumen de clases en tiempo real.","frm"],
+   ["PhET Simulaciones","https://phet.colorado.edu/es","Experiencias inmersivas","Simulaciones interactivas de ciencias y matemáticas; combínalas con guías creadas con IA.","free"],
+   ["CoSpaces Edu","https://www.cospaces.io","Experiencias inmersivas","Creación de mundos en realidad virtual y aumentada para el aprendizaje basado en proyectos.","pay"]
+  ],
+  demos:[
+   {t:"Configurar un tutor socrático para tu curso",tool:"Gemini Gems / GPT personalizado / Claude Projects",obj:"Crear un asistente que guíe a los estudiantes con preguntas, basado en los materiales del curso.",
+    steps:["Crea un Gem (Gemini), un GPT (ChatGPT) o un Proyecto (Claude).","Pega las instrucciones del prompt como «instrucciones del sistema».","Sube el sílabo y las lecturas como conocimiento del asistente.","Pruébalo como si fueras estudiante: intenta que te dé la respuesta.","Ajusta las instrucciones si revela soluciones o se sale del tema.","Comparte el enlace e informa a los estudiantes sus límites y la política de uso."],
+    prompt:"Eres un tutor socrático del curso [nombre].\nReglas:\n- Nunca des la respuesta final directamente; guía con preguntas de una en una.\n- Primero pregunta qué sabe el estudiante y dónde se atascó.\n- Usa solo los materiales cargados; si algo no está, dilo.\n- Da pistas graduadas (pista 1: concepto; pista 2: procedimiento; pista 3: ejemplo similar).\n- Al final pide al estudiante que explique con sus palabras lo aprendido.\n- Tono amable y lenguaje claro para estudiantes de [ciclo].",
+    res:"Un tutor disponible 24/7 que promueve el razonamiento y respeta el contenido del curso."},
+   {t:"Banco de práctica con repetición espaciada",tool:"NotebookLM + Anki / Quizlet",obj:"Convertir una unidad del curso en preguntas de recuperación y tarjetas de repaso.",
+    steps:["Sube la lectura o las diapositivas de la unidad a NotebookLM.","Genera un cuestionario y tarjetas desde el panel Studio.","Revisa y corrige las preguntas ambiguas.","Exporta a Quizlet o Anki (formato pregunta;respuesta).","Programa repasos: día 1, 3, 7 y 14.","Analiza los errores frecuentes para la siguiente clase."],
+    prompt:"A partir de las fuentes, crea 20 tarjetas de estudio en formato CSV «pregunta;respuesta»:\n- 8 de recuerdo de conceptos clave\n- 8 de aplicación a casos\n- 4 de análisis o comparación\nRespuestas breves (máx. 25 palabras), sin ambigüedades, con la página de la fuente entre paréntesis.",
+    res:"Tarjetas listas para importar y un calendario de repaso basado en evidencia."}
+  ]
+ },
+ conocimiento:{
+  ico:"🗂️",color:"#ec4899",
+  title:"IA en la <span class='grad'>gestión del conocimiento</span>",
+  lead:"Cómo las universidades y organizaciones capturan, organizan, comparten y reutilizan su conocimiento con IA: repositorios inteligentes, asistentes con recuperación aumentada (RAG), automatización de flujos y aprendizaje organizacional.",
+  theory:[
+   ["🔄","Modelo SECI","Socialización, externalización, combinación e internalización: la IA acelera sobre todo la externalización y la combinación."],
+   ["🧲","RAG (generación aumentada por recuperación)","El asistente busca en los documentos de la institución antes de responder, con citas y menos alucinaciones."],
+   ["⚙️","Automatización","Flujos que clasifican, resumen y distribuyen información (actas, normativas, consultas frecuentes)."],
+   ["🏷️","Curaduría y metadatos","La IA etiqueta y relaciona documentos; las personas validan la vigencia y la calidad."]
+  ],
+  flowTitle:"Proceso: ciclo de gestión del conocimiento con IA",
+  flow:[["Capturar","Actas, clases, normativas, investigaciones y transcripciones."],["Organizar","Etiquetado, taxonomía y repositorio con IA."],["Almacenar","Base de conocimiento segura (wiki, Drive, SharePoint)."],["Recuperar","Asistente RAG con citas a documentos oficiales."],["Compartir","Boletines, FAQ y onboarding automatizados."],["Aplicar y aprender","Decisiones, lecciones aprendidas y actualización."]],
+  cats:["Asistentes con tus documentos","Bases de conocimiento","Automatización","Código abierto y autoalojado"],
+  tools:[
+   ["NotebookLM","https://notebooklm.google.com","Asistentes con tus documentos","Cuadernos compartibles sobre normativas o procedimientos, con respuestas citadas.","free"],
+   ["Claude Projects","https://claude.ai","Asistentes con tus documentos","Proyectos con base de conocimiento e instrucciones compartidas por un equipo.","frm"],
+   ["Gemini Gems","https://gemini.google.com","Asistentes con tus documentos","Asistentes personalizados conectados a archivos de Google Drive.","frm"],
+   ["GPTs personalizados","https://chatgpt.com/gpts","Asistentes con tus documentos","Asistentes con instrucciones y archivos propios, compartibles en la organización.","frm"],
+   ["Microsoft 365 Copilot","https://www.microsoft.com/microsoft-365/copilot","Asistentes con tus documentos","Busca y resume información en SharePoint, Teams, Outlook y OneDrive de la institución.","pay"],
+   ["Notion AI","https://www.notion.com/product/ai","Bases de conocimiento","Wiki colaborativa con búsqueda y respuestas de IA sobre el espacio de trabajo.","frm"],
+   ["Confluence + Rovo","https://www.atlassian.com/software/rovo","Bases de conocimiento","Base de conocimiento corporativa con agentes de IA de Atlassian.","pay"],
+   ["Obsidian","https://obsidian.md","Bases de conocimiento","Notas enlazadas (segundo cerebro) en Markdown local, con complementos de IA.","free"],
+   ["Glean","https://www.glean.com","Bases de conocimiento","Búsqueda empresarial con IA sobre todas las aplicaciones de la organización.","pay"],
+   ["n8n","https://n8n.io","Automatización","Automatización de flujos con nodos de IA; se puede autoalojar.","os"],
+   ["Make","https://www.make.com","Automatización","Automatización visual entre aplicaciones con módulos de IA.","frm"],
+   ["Zapier","https://zapier.com","Automatización","Conecta miles de aplicaciones y agrega pasos de IA a los flujos.","frm"],
+   ["AnythingLLM","https://anythingllm.com","Código abierto y autoalojado","Asistente RAG privado de escritorio o servidor sobre documentos propios, con modelos locales.","os"],
+   ["Open WebUI","https://openwebui.com","Código abierto y autoalojado","Interfaz de chat autoalojada con RAG para modelos locales o por API.","os"],
+   ["Dify","https://dify.ai","Código abierto y autoalojado","Plataforma para construir asistentes y agentes RAG con flujos visuales.","os"],
+   ["Ollama","https://ollama.com","Código abierto y autoalojado","Ejecuta modelos de lenguaje abiertos localmente, sin enviar datos a terceros.","os"]
+  ],
+  demos:[
+   {t:"Asistente de normativa académica (RAG)",tool:"NotebookLM o AnythingLLM",obj:"Responder consultas frecuentes de docentes y estudiantes con citas a reglamentos oficiales.",
+    steps:["Reúne los reglamentos vigentes (grados, matrícula, evaluación) en PDF.","Crea un cuaderno en NotebookLM o un espacio de trabajo en AnythingLLM y carga los documentos.","Añade las instrucciones del prompt (o configúralas como prompt del sistema).","Prueba 10 preguntas reales y verifica cada cita contra el documento.","Comparte el cuaderno con permisos de solo lectura.","Programa una revisión cuando cambie la normativa (control de versiones)."],
+    prompt:"Eres el asistente de normativa académica de la [Unidad/Facultad].\n- Responde solo con base en los documentos cargados y cita el artículo y el documento.\n- Si la respuesta no está en los documentos, di: «No encuentro esta información en la normativa cargada; consulta con [oficina]».\n- Responde en pasos claros cuando se trate de trámites.\n- Indica la fecha o versión del documento citado.\nPregunta de prueba: ¿Cuáles son los requisitos para obtener el diploma y cuál es la nota mínima?",
+    res:"Respuestas consistentes y citadas que reducen consultas repetitivas a las oficinas."},
+   {t:"Automatizar resúmenes de reuniones",tool:"Otter.ai / Copilot en Teams + n8n o Make",obj:"Transformar reuniones académicas en actas, acuerdos y tareas registradas en la base de conocimiento.",
+    steps:["Graba la reunión con consentimiento de los participantes.","Obtén la transcripción (Otter, Teams o Meet).","Envía la transcripción a un flujo de n8n o Make con un paso de IA.","Genera acta, acuerdos y tareas con responsables y fechas.","Publica el acta en Notion, Drive o SharePoint y notifica por correo.","Revisa el acta antes de que sea oficial (validación humana)."],
+    prompt:"A partir de la transcripción, genera:\n1) Acta: fecha, asistentes, agenda.\n2) Resumen por punto de agenda (máx. 5 líneas cada uno).\n3) Acuerdos numerados.\n4) Tabla de tareas: tarea | responsable | fecha límite.\n5) Temas pendientes para la próxima reunión.\nNo inventes nombres ni fechas; marca [VERIFICAR] si algo no es claro.",
+    res:"Actas estandarizadas y tareas trazables que alimentan la memoria institucional."}
+  ]
+ }
+};
+
+TOPICS.automatizacion={
+  ico:"⚙️",color:"#f5a623",
+  title:"Automatización con <span class='grad'>IA</span>",
+  lead:"Procesos y plataformas que conectan varios servicios de IA entre sí y con las aplicaciones de la institución (formularios, correo, LMS, hojas de cálculo, repositorios) para ejecutar flujos de trabajo de principio a fin, con validación humana en los puntos críticos.",
+  theory:[
+   ["🔗","Orquestación multi-IA","Un flujo combina varios modelos: uno transcribe, otro resume, otro clasifica, y cada paso usa el servicio más adecuado."],
+   ["⚡","Disparador → acción","Todo flujo empieza con un evento (formulario enviado, correo, archivo nuevo, horario) y termina en una acción verificable."],
+   ["🤖","Agentes y MCP","Los agentes de IA deciden qué herramienta usar. El Model Context Protocol (MCP) estandariza su conexión con datos y aplicaciones."],
+   ["🧑‍⚖️","Humano en el circuito","Las calificaciones, comunicaciones oficiales y decisiones sobre personas pasan por aprobación humana antes de ejecutarse."]
+  ],
+  flowTitle:"Proceso: anatomía de un flujo automatizado con varias IA",
+  flow:[["Disparador","Formulario, correo, archivo nuevo, webhook u horario."],["Captura de datos","Extrae texto, audio o tablas de la fuente."],["IA 1: procesar","Transcribir, extraer o clasificar (Whisper, Gemini)."],["IA 2: generar","Resumir, redactar o retroalimentar (GPT, Claude)."],["Validación humana","Aprobación o corrección antes de enviar."],["Acción y registro","Enviar, guardar en Sheets, LMS o Notion y registrar."]],
+  cats:["Plataformas de automatización","Constructores de agentes","Acceso multi-modelo","Ecosistemas institucionales","Código abierto"],
+  tools:[
+   ["n8n","https://n8n.io","Plataformas de automatización","Flujos visuales con nodos de OpenAI, Gemini, Claude y agentes; más de 400 integraciones. Se puede autoalojar.","os"],
+   ["Make","https://www.make.com","Plataformas de automatización","Escenarios visuales que encadenan módulos de IA con Google, Microsoft, Moodle, WhatsApp y más.","frm"],
+   ["Zapier","https://zapier.com","Plataformas de automatización","Conecta miles de aplicaciones; incluye pasos de IA, agentes y tablas.","frm"],
+   ["Pipedream","https://pipedream.com","Plataformas de automatización","Automatización para perfiles técnicos: código (Node/Python) más miles de API listas.","frm"],
+   ["IFTTT","https://ifttt.com","Plataformas de automatización","Automatizaciones simples «si pasa esto, haz aquello», con pasos de IA.","frm"],
+   ["Relevance AI","https://relevanceai.com","Constructores de agentes","Crea equipos de agentes de IA con herramientas propias sin programar.","frm"],
+   ["Gumloop","https://www.gumloop.com","Constructores de agentes","Flujos y agentes de IA arrastrando bloques: scraping, documentos y LLMs.","frm"],
+   ["Lindy","https://www.lindy.ai","Constructores de agentes","Asistentes autónomos para correo, agenda, reuniones y atención de consultas.","frm"],
+   ["OpenAI Agent Builder","https://platform.openai.com","Constructores de agentes","Diseño visual de agentes con herramientas, conectores y evaluaciones en la plataforma de OpenAI.","pay"],
+   ["Model Context Protocol (MCP)","https://modelcontextprotocol.io","Constructores de agentes","Estándar abierto para conectar asistentes de IA con datos y aplicaciones externas.","os"],
+   ["OpenRouter","https://openrouter.ai","Acceso multi-modelo","Una sola API para cientos de modelos (GPT, Claude, Gemini, Llama, DeepSeek).","frm"],
+   ["Poe","https://poe.com","Acceso multi-modelo","Chatea con muchos modelos de texto, imagen y video desde una sola cuenta y crea bots.","frm"],
+   ["Microsoft Power Automate","https://www.microsoft.com/power-platform/products/power-automate","Ecosistemas institucionales","Flujos con Copilot entre Outlook, Teams, SharePoint, Forms y Excel (ideal con Microsoft 365 institucional).","frm"],
+   ["Microsoft Copilot Studio","https://www.microsoft.com/microsoft-copilot/microsoft-copilot-studio","Ecosistemas institucionales","Agentes conversacionales y flujos conectados a los datos de la organización.","pay"],
+   ["Google Apps Script + Gemini API","https://developers.google.com/apps-script","Ecosistemas institucionales","Automatiza Sheets, Forms, Gmail y Drive con scripts que llaman a la API de Gemini.","free"],
+   ["Google AI Studio","https://aistudio.google.com","Ecosistemas institucionales","Prueba modelos Gemini y obtén la clave de API para tus automatizaciones.","frm"],
+   ["Activepieces","https://www.activepieces.com","Código abierto","Alternativa abierta a Zapier con piezas de IA y opción de autoalojamiento.","os"],
+   ["Flowise","https://flowiseai.com","Código abierto","Construye flujos de agentes y RAG con nodos visuales sobre LangChain.","os"],
+   ["Langflow","https://www.langflow.org","Código abierto","Editor visual para aplicaciones multiagente y RAG, exportables como API.","os"],
+   ["Dify","https://dify.ai","Código abierto","Plataforma LLMOps para flujos, agentes y bases de conocimiento con varios modelos.","os"]
+  ],
+  demos:[
+   {t:"Retroalimentación automática de tareas",tool:"Google Forms + n8n (o Make) + Gemini/GPT + Gmail",obj:"Cuando un estudiante envía su respuesta, generar un borrador de retroalimentación con rúbrica que el docente aprueba antes de enviarlo.",
+    steps:["Crea un Google Form con correo y respuesta, vinculado a Google Sheets.","En n8n o Make, crea un flujo con el disparador <b>«Nueva fila en Google Sheets»</b>.","Agrega un nodo de IA (OpenAI, Gemini o Claude) con el prompt y tu rúbrica.","Guarda la retroalimentación en una columna «Borrador» y marca «Pendiente de revisión».","<b>Revisa y aprueba</b> en la hoja; un segundo flujo envía el correo solo si la columna «Aprobado» = Sí.","Registra la fecha de envío y analiza las respuestas frecuentes para ajustar la clase."],
+    prompt:"Eres asistente de evaluación del curso [curso].\nRúbrica: [criterio 1: descripción y niveles] [criterio 2] [criterio 3].\nRespuesta del estudiante: {{respuesta}}\nDevuelve JSON con:\n- nivel_por_criterio (Logrado/En proceso/Inicio) y su justificación breve\n- fortalezas (2 viñetas)\n- mejoras (2 viñetas concretas y accionables)\n- pregunta_reflexiva (1)\nTono motivador, máx. 150 palabras. No asignes nota numérica.",
+    res:"Retroalimentación formativa en minutos, siempre revisada por el docente antes de llegar al estudiante."},
+   {t:"Vigilancia científica automatizada",tool:"OpenAlex / RSS + Make (o n8n) + Claude/GPT + Notion o Telegram",obj:"Recibir cada semana un boletín con los nuevos artículos de tu línea de investigación, resumidos y clasificados por relevancia.",
+    steps:["Define tu consulta en OpenAlex (por ejemplo, conceptos y fechas) o una alerta RSS de la revista o de Google Scholar.","En Make o n8n, programa el disparador <b>semanal</b> y una petición HTTP a la API de OpenAlex.","Filtra los artículos nuevos (no procesados antes) con un almacén de datos.","Envía título y resumen a la IA con el prompt de clasificación.","Guarda los resultados en una base de Notion o Sheets y envía el boletín por correo o Telegram.","<b>Lee los artículos originales</b> antes de citarlos: el resumen de la IA es solo un filtro."],
+    prompt:"Línea de investigación: [tema, p. ej. IA multimodal para análisis forense de accidentes].\nPara cada artículo (título + resumen):\n1) Relevancia para mi línea (alta/media/baja) con justificación de 1 línea.\n2) Resumen en español de 2 líneas: objetivo, método, hallazgo.\n3) Tipo de estudio (original, revisión, dataset, otro).\n4) Etiquetas (3 palabras clave).\nDevuelve una tabla en Markdown ordenada por relevancia. No inventes datos que no estén en el resumen.",
+    res:"Boletín semanal priorizado y una base de literatura que crece sola, lista para tu revisión."},
+   {t:"De la clase grabada al material de estudio",tool:"Zoom/Meet + Whisper o Gemini + GPT/Claude + Google Drive y LMS",obj:"Convertir automáticamente la grabación de una clase en transcripción, resumen, glosario y cuestionario publicados en el aula virtual.",
+    steps:["Activa la grabación en la nube; el flujo se dispara cuando aparece un archivo nuevo en Drive.","Paso IA 1: transcribe el audio (Whisper o Gemini).","Paso IA 2: genera resumen, glosario y 10 preguntas con el prompt.","Guarda un documento en la carpeta del curso con el formato de la institución.","<b>Revisa el contenido</b> y publícalo en Moodle, Classroom o Teams.","Mide el uso (visitas, resultados del cuestionario) para mejorar la próxima sesión."],
+    prompt:"A partir de la transcripción de la clase de [curso], sesión [N]:\n1) Resumen estructurado (máx. 300 palabras) con los 3-5 conceptos clave.\n2) Glosario de 8 términos con definición breve.\n3) 10 preguntas de opción múltiple (4 alternativas, marca la correcta y explica por qué).\n4) 2 preguntas abiertas de aplicación.\nSi la transcripción tiene errores evidentes, márcalos como [VERIFICAR].",
+    res:"Material de repaso listo el mismo día de la clase, con mínima carga para el docente."}
+  ]
+};
+
+/* ===== LLM FAVORITOS ===== */
+const LLMS=[
+ {id:"claude",name:"Claude",org:"Anthropic",url:"https://claude.ai",doc:"https://claude.com/docs/extend/overview",
+  tag:"Redacción académica, análisis de documentos largos y agentes que trabajan con tus archivos",
+  rows:[
+   ["Skills","Carpetas con un archivo SKILL.md (instrucciones, plantillas y scripts) que enseñan a Claude a hacer una tarea a tu manera. Se activan solas cuando la tarea coincide, o con /nombre."],
+   ["Prompts avanzados","Responde muy bien a la estructura con etiquetas XML (<contexto>, <tarea>, <formato>), a ejemplos y a explicar por qué pides algo. Admite instrucciones de proyecto y estilos personalizados."],
+   ["Agentes","Las tareas largas se delegan a subagentes especializados. Con un plugin, Cowork y Claude Code ejecutan también los agentes que trae."],
+   ["MCP y conectores","Creador del Model Context Protocol. Conectores listos para Google Drive, Gmail, Calendar, Microsoft 365, GitHub, Notion, Canva y más, además de servidores MCP propios."],
+   ["Comandos","En Claude Code: /init, /clear, /compact, /mcp, /agents, /plugin, /help y comandos propios en Markdown. Las skills también funcionan como comandos /nombre."],
+   ["Claude Cowork","Las capacidades de Cowork ya están integradas en la app de Claude: tareas que se ejecutan con tus archivos y apps hasta entregar un documento, una hoja o una presentación terminados, incluso de forma programada."],
+   ["Claude Code","Agente de programación para terminal, IDE, escritorio y web. Edita repositorios, ejecuta pruebas y usa CLAUDE.md, hooks, subagentes, MCP y plugins."],
+   ["Plugins","Paquetes que reúnen skills, conectores MCP, comandos y agentes en una sola instalación. Se distribuyen mediante marketplaces y se comparten con el equipo."],
+   ["Otros","Proyectos con base de conocimiento, artifacts (documentos y páginas publicables), investigación profunda, memoria, Claude in Chrome, Claude for M365 (Excel, Word, PowerPoint) y Claude Tag en Slack."]
+  ],
+  prompt:"<rol>Eres asesor metodológico de tesis de posgrado.</rol>\n<contexto>\nPrograma: Maestría en [área]. Tema: [tema].\nAdjunto: <documento>[pega aquí el capítulo]</documento>\n</contexto>\n<tarea>\nEvalúa la coherencia entre problema, objetivos, hipótesis y variables.\nPiensa paso a paso antes de responder.\n</tarea>\n<formato>\nTabla: elemento | observación | gravedad (alta/media/baja) | sugerencia.\nLuego, 3 preguntas que el jurado probablemente haría.\n</formato>\n<restricciones>No inventes referencias. Si falta información, indícalo.</restricciones>"},
+ {id:"gemini",name:"Gemini",org:"Google",url:"https://gemini.google.com",doc:"https://gemini.google/overview/",
+  tag:"Multimodal nativo (texto, imagen, audio y video) e integrado a Google Workspace y Classroom",
+  rows:[
+   ["Skills / Gems","Los Gems son asistentes personalizados con instrucciones y archivos fijos; hay Gems prediseñados y Gems para Classroom con los que el docente crea tutores para sus estudiantes."],
+   ["Prompts avanzados","Persona, tarea, contexto y formato (guía 101 de Google). Referencia archivos de Drive con @, combina imagen, audio y video en un mismo prompt y usa Canvas para editar documentos y código."],
+   ["Agentes","Gemini Spark, un agente personal que trabaja 24/7 en la nube; Daily Brief; Deep Research y Deep Research Max; y agentes empresariales en Gemini Enterprise."],
+   ["MCP y conectores","Apps conectadas (Gmail, Drive, Calendar, YouTube, Maps) y nuevas conexiones MCP con socios como Canva. Deep Research Max admite MCP para conectar datos privados."],
+   ["Comandos","En Gemini CLI: /help, /tools, /mcp, /memory, /chat, /extensions y comandos propios en archivos .toml; @ para incluir archivos y ! para comandos del sistema."],
+   ["Código y desarrollo","Gemini CLI (agente de terminal de código abierto), Google Antigravity (IDE con agentes), Jules (agente de programación asíncrono) y Google AI Studio para prototipar con la API."],
+   ["Extensiones","Las extensiones de Gemini CLI empaquetan servidores MCP, comandos y contexto (GEMINI.md) para instalarlos con un solo comando."],
+   ["Multimedia","Nano Banana (generación y edición de imágenes), Veo y Flow (video), Gemini Live con cámara y pantalla, y resúmenes de audio en NotebookLM."],
+   ["Otros","NotebookLM, aprendizaje guiado, integración con Docs, Gmail, Sheets y Slides, y app para Android, iOS y macOS."]
+  ],
+  prompt:"Persona: Soy docente universitario de [curso] en Perú.\nTarea: Crea una guía de estudio a partir de @[archivo de Drive] y del video adjunto.\nContexto: Estudiantes de [ciclo]; la evaluación es [tipo] el [fecha].\nFormato:\n1) Resumen en 10 viñetas.\n2) Tabla de conceptos clave con ejemplo local.\n3) 8 preguntas de práctica con solucionario aparte.\n4) Un esquema visual (diagrama en texto) del tema.\nUsa solo las fuentes indicadas y cita el minuto del video o la página del documento."},
+ {id:"chatgpt",name:"ChatGPT",org:"OpenAI",url:"https://chatgpt.com",doc:"https://help.openai.com/en/collections/3742473",
+  tag:"Ecosistema amplio de GPTs, apps y agentes; ChatGPT Work y Codex para tareas largas",
+  rows:[
+   ["Skills","Las skills ya están disponibles de forma general y se gestionan en la pestaña Skills del directorio de plugins. Los GPTs personalizados siguen sirviendo como asistentes con instrucciones y archivos."],
+   ["Prompts avanzados","Markdown con encabezados y delimitadores (### o \"\"\"). Los modelos GPT-5.x siguen las instrucciones de forma muy literal: evita contradicciones y define criterios de éxito. Hay un optimizador de prompts."],
+   ["Agentes","ChatGPT Work trabaja por horas entre tus apps y archivos para entregar documentos, hojas, presentaciones o sitios; también hay modo agente, Deep Research, tareas programadas y agentes de espacio de trabajo para equipos."],
+   ["MCP y conectores","Las «apps» reemplazaron a los antiguos conectores: Google Drive, SharePoint, Teams, GitHub, Canva y más. Los desarrolladores crean apps con el Apps SDK, basado en MCP."],
+   ["Comandos","/ para elegir herramientas en el chat, menú de comandos del escritorio, y en Codex CLI: /model, /approvals, /review, /init y prompts personalizados."],
+   ["Codex","Agente de programación en app, IDE, CLI y nube, con modo objetivo, navegador integrado y plugins compartidos."],
+   ["Plugins","Paquetes de skills, apps y plantillas para flujos específicos, disponibles en web y escritorio, incluidos Work y Codex."],
+   ["Multimedia","Generación de imágenes, voz en tiempo real con archivos y Proyectos, Sora para video y Canvas para editar textos y código."],
+   ["Otros","Proyectos compartibles, memoria, ChatGPT Sites (publicar páginas internas), modo estudio, y GPTs y tienda de GPTs."]
+  ],
+  prompt:"### Rol\nEres diseñador instruccional universitario.\n### Objetivo\nCrear una unidad didáctica de 4 semanas sobre [tema].\n### Contexto\n\"\"\"\nCurso: [curso] · Ciclo: [X] · Modalidad: virtual\nResultado de aprendizaje: [ ]\n\"\"\"\n### Instrucciones\n1. Propón la secuencia semana a semana.\n2. Incluye una actividad con IA y su declaración de uso.\n3. Diseña la evaluación con rúbrica.\n### Criterios de éxito\n- Coherencia resultado–actividad–evaluación.\n- Tiempos realistas (máx. 6 h/semana).\n### Formato de salida\nTablas en Markdown; nada de texto introductorio."}
+];
+const LLM_MATRIX=[
+ ["Asistentes personalizados","Proyectos + Skills","Gems","GPTs + Skills"],
+ ["Agente para tareas largas","Cowork (en la app)","Spark","ChatGPT Work"],
+ ["Investigación profunda","Research","Deep Research / Max","Deep Research"],
+ ["Conexión con apps (MCP)","Conectores MCP","Apps conectadas + MCP","Apps (Apps SDK, MCP)"],
+ ["Agente de programación","Claude Code","Gemini CLI · Antigravity · Jules","Codex"],
+ ["Paquetes instalables","Plugins","Extensiones (CLI)","Plugins"],
+ ["Imagen y video","Diagramas y artifacts (no genera imágenes)","Nano Banana · Veo","Imágenes · Sora"],
+ ["Estructura de prompt sugerida","Etiquetas XML","Persona-Tarea-Contexto-Formato","Markdown + delimitadores"]
+];
+function llmHTML(){
+  return `<div class="callout" style="margin-top:22px"><b>Nota:</b> estas funciones cambian cada mes y varían según el plan (gratuito, Pro, Edu o Enterprise) y el país. Verifica la disponibilidad en la documentación oficial enlazada en cada tarjeta.</div>
+  <h2><span class="tag-sec">Comparativa</span>Matriz rápida de funciones</h2>
+  <div class="tscroll"><table><thead><tr><th>Función</th>${LLMS.map(l=>`<th>${l.name}</th>`).join("")}</tr></thead><tbody>
+  ${LLM_MATRIX.map(r=>`<tr><td><b>${esc(r[0])}</b></td>${r.slice(1).map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+  <h2><span class="tag-sec">Fichas</span>Ficha técnica de cada LLM</h2>
+  <div class="dsel" role="group" aria-label="Elegir LLM">${LLMS.map((l,i)=>`<button class="chip" aria-pressed="${i===0}" data-llm="${l.id}">${l.name} · ${l.org}</button>`).join("")}</div>
+  <div id="llmBox"></div>`;
+}
+function renderLLM(id){
+  const l=LLMS.find(x=>x.id===id);
+  document.querySelectorAll("[data-llm]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.llm===id));
+  $("#llmBox").innerHTML=`<div class="demo">
+   <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-start">
+    <div><h3 style="font-size:26px">${l.name} <span class="muted small" style="font-family:var(--font-mono)">${l.org}</span></h3><p class="muted">${esc(l.tag)}</p></div>
+    <div class="cta" style="margin-top:0"><a class="btn pri" href="${l.url}" target="_blank" rel="noopener">Abrir ${l.name} ↗</a><a class="btn" href="${l.doc}" target="_blank" rel="noopener">Documentación oficial ↗</a></div>
+   </div>
+   <div class="grid g3" style="margin-top:18px">${l.rows.map(r=>`<div class="card" style="background:var(--bg2)"><div class="plabel">${esc(r[0])}</div><p class="small" style="color:var(--tx2)">${esc(r[1])}</p></div>`).join("")}</div>
+   <div class="plabel" style="margin-top:22px"><span>Prompt avanzado de ejemplo para ${l.name}</span><button class="copy" data-copy-llm>Copiar</button></div>
+   <div class="prompt">${esc(l.prompt)}</div></div>`;
+}
+
+TOPICS.favoritos={
+  ico:"⭐",color:"#f5a623",
+  title:"LLM favoritos: <span class='grad'>Claude, Gemini y ChatGPT</span>",
+  lead:"Los tres grandes modelos multimodales comparados función por función: skills, prompts avanzados, agentes, MCP, comandos, Claude Cowork, Claude Code, plugins y conectores, con ejemplos listos para usar en docencia e investigación.",
+  pre:llmHTML,
+  theory:[
+   ["🧩","Skills","Conocimiento procedimental reutilizable: le enseñan al modelo cómo haces una tarea (formato APA, rúbrica de tu facultad, plantilla de informe)."],
+   ["🔌","MCP y conectores","El Model Context Protocol es el «USB» de la IA: un estándar abierto para conectar el modelo con Drive, correo, bases de datos o tu LMS."],
+   ["🤖","Agentes","Modelos que planifican, usan herramientas y ejecutan varios pasos hasta cumplir un objetivo, con puntos de aprobación humana."],
+   ["📦","Plugins","Paquetes instalables que juntan skills, conectores, comandos y agentes para que todo un equipo use la misma configuración."]
+  ],
+  flowTitle:"Proceso: del chat simple al agente personalizado",
+  flow:[["Prompt","Instrucción clara con rol, tarea, contexto y formato."],["Proyecto / Gem / GPT","Instrucciones y archivos permanentes."],["Skill","Procedimiento reutilizable con plantillas."],["Conector MCP","Acceso a Drive, correo, LMS y datos."],["Agente","Ejecuta tareas de varios pasos con supervisión."],["Plugin","Empaqueta todo y lo comparte con el equipo."]],
+  cats:["Claude","Gemini","ChatGPT","Comparadores"],
+  toolsTitle:"Accesos y documentación oficial",
+  tools:[
+   ["Claude (app)","https://claude.ai","Claude","Chat, proyectos, artifacts, investigación, conectores, skills y tareas tipo Cowork.","frm"],
+   ["Claude: personalizar (skills, conectores, plugins)","https://claude.com/docs/extend/overview","Claude","Documentación oficial para conectar herramientas, crear skills e instalar plugins.","free"],
+   ["Claude Code","https://code.claude.com/docs/en/overview","Claude","Agente de programación: comandos, hooks, subagentes, MCP y plugins.","frm"],
+   ["Anthropic Academy","https://www.anthropic.com/learn","Claude","Cursos oficiales gratuitos sobre Claude, la API, MCP y Claude Code.","free"],
+   ["Gemini (app)","https://gemini.google.com","Gemini","Chat multimodal, Gems, Deep Research, Canvas, imágenes y video.","frm"],
+   ["Gemini CLI","https://github.com/google-gemini/gemini-cli","Gemini","Agente de terminal de código abierto con MCP, extensiones y comandos personalizados.","os"],
+   ["Google AI Studio","https://aistudio.google.com","Gemini","Prueba los modelos Gemini, genera prompts y obtén la clave de API.","frm"],
+   ["Gemini para educación","https://edu.google.com","Gemini","Gemini y NotebookLM en Workspace for Education y Gems en Classroom.","frm"],
+   ["ChatGPT (app)","https://chatgpt.com","ChatGPT","Chat, Proyectos, GPTs, Work, Codex, apps y plugins.","frm"],
+   ["ChatGPT: ayuda oficial","https://help.openai.com/en/collections/3742473","ChatGPT","Guías del modo agente, Proyectos y buenas prácticas de prompting.","free"],
+   ["OpenAI Academy","https://academy.openai.com","ChatGPT","Cursos y talleres oficiales gratuitos de OpenAI, con contenido para educadores.","free"],
+   ["Model Context Protocol","https://modelcontextprotocol.io","Comparadores","Especificación y directorio del estándar MCP que usan los tres ecosistemas.","os"],
+   ["LMArena","https://lmarena.ai","Comparadores","Compara modelos a ciegas y consulta el ranking según los votos de los usuarios.","free"]
+  ],
+  demos:[
+   {t:"Crear tu primera skill en Claude",tool:"Claude (Configuración → Personalizar → Skills)",obj:"Enseñarle a Claude a revisar trabajos con la rúbrica de tu curso, siempre del mismo modo.",
+    steps:["Crea una carpeta <b>revision-rubrica</b> con un archivo SKILL.md.","Escribe en el encabezado el nombre y una descripción de cuándo usarla.","Debajo, escribe el procedimiento y pega tu rúbrica (o agrégala como archivo aparte).","Comprime la carpeta en .zip y súbela en Personalizar → Skills.","Pruébala: «revisa este ensayo con mi rúbrica» o escribe /revision-rubrica.","Ajusta la descripción si no se activa cuando corresponde."],
+    prompt:"---\nname: revision-rubrica\ndescription: Úsala cuando el usuario pida revisar o retroalimentar un ensayo o informe de estudiantes con la rúbrica del curso.\n---\n# Revisión con rúbrica\n1. Lee el trabajo completo antes de evaluar.\n2. Evalúa cada criterio de rubrica.md con su nivel y una evidencia textual.\n3. Escribe 2 fortalezas y 2 mejoras accionables.\n4. No asignes nota final: el docente decide.\n5. Tono formativo, en español, máx. 250 palabras.",
+    res:"Una skill reutilizable que aplica tu rúbrica de forma consistente en cada revisión."},
+   {t:"Gem tutor para tu curso (Gemini)",tool:"Gemini → Explorar Gems → Nuevo Gem",obj:"Crear un tutor con los materiales del curso para compartirlo con los estudiantes o en Classroom.",
+    steps:["Entra a gemini.google.com → <b>Explorar Gems</b> → Nuevo Gem.","Ponle nombre (p. ej., «Tutor de Estadística») y pega las instrucciones.","En Conocimiento, agrega el sílabo y las lecturas desde Drive.","Prueba en la vista previa con preguntas reales de estudiantes.","Guarda y compártelo (o asígnalo en Google Classroom).","Revisa periódicamente las respuestas y actualiza los archivos."],
+    prompt:"Eres el tutor del curso [curso]. Ayuda a los estudiantes a comprender, no a copiar.\n- Responde con preguntas guía y pistas graduadas.\n- Usa solo los archivos de conocimiento; si algo no está, dilo.\n- Cita el documento y la página.\n- Si te piden resolver una evaluación, explica el método con un ejemplo distinto.\n- Cierra cada explicación con una pregunta de comprobación.",
+    res:"Un tutor 24/7 alineado con tu curso y fácil de compartir."},
+   {t:"Proyecto + agente en ChatGPT",tool:"ChatGPT → Proyectos / Work",obj:"Centralizar los materiales de una investigación y pedir a un agente un informe de avance con fuentes.",
+    steps:["Crea un <b>Proyecto</b> y sube tus documentos clave (protocolo, matriz, artículos).","Escribe las instrucciones del proyecto (rol, estilo, norma APA 7).","Conecta las apps necesarias (Drive o SharePoint) si tu plan lo permite.","Pide la tarea a Work o al modo agente con el prompt.","Revisa el plan que propone el agente y aprueba los pasos sensibles.","Verifica cada referencia del informe final en la fuente original."],
+    prompt:"Objetivo: preparar un informe de avance de mi revisión sistemática.\n1. Lee los archivos del proyecto (protocolo y tabla de extracción).\n2. Resume el estado: registros cribados, incluidos y excluidos con motivos.\n3. Genera un borrador del diagrama PRISMA 2020 en texto.\n4. Lista los vacíos que quedan por cubrir.\nEntregable: documento de 2 páginas con referencias APA 7 tomadas solo de mis archivos.\nAntes de ejecutar, muéstrame tu plan de trabajo.",
+    res:"Informe de avance trazable, construido sobre tus propios documentos."}
+  ]
+};
+
+/* ===== PUBLICIDAD ===== */
+TOPICS.publicidad={
+  ico:"📣",color:"#f5a623",
+  title:"Herramientas de IA para <span class='grad'>publicidad y marketing</span>",
+  lead:"Diseño gráfico, imágenes generativas, avatares, edición de video, voz y textos publicitarios con IA para promocionar programas académicos, eventos, investigaciones y marcas personales, con criterios de ética y derechos de autor.",
+  theory:[
+   ["🎯","Brief primero","Objetivo, público, mensaje clave, canal y llamada a la acción. La IA multiplica las variantes, pero la estrategia es humana."],
+   ["🎨","Identidad de marca","Kit de marca (colores, tipografías, logo) cargado en Canva o Firefly para que todas las piezas sean consistentes."],
+   ["🎬","Video corto primero","Reels y shorts de 15 a 60 s con subtítulos: avatares, recortes automáticos y doblaje multiplican el alcance."],
+   ["⚖️","Ética y derechos","Etiqueta el contenido sintético, no clones voces o rostros sin consentimiento y revisa la licencia de uso comercial de cada herramienta."]
+  ],
+  flowTitle:"Proceso: campaña publicitaria asistida por IA",
+  flow:[["Brief y público","Objetivo, persona, mensaje y canales."],["Copy","Titulares, textos y guiones con un LLM."],["Visuales","Imágenes y piezas en Canva, Firefly o Leonardo."],["Video","Avatar (HeyGen) o edición (CapCut, Runway)."],["Voz y música","Locución con ElevenLabs y música con Suno."],["Publicar y medir","Programar, hacer pruebas A/B y analizar métricas."]],
+  cats:["Diseño gráfico","Imagen generativa","Video con avatares","Edición y generación de video","Voz y música","Copy y anuncios"],
+  tools:[
+   ["Canva (Magic Studio)","https://www.canva.com","Diseño gráfico","Diseño con IA: Magic Design, Magic Write, quitar fondos, redimensionar para cada red y kit de marca.","frm"],
+   ["Adobe Express","https://www.adobe.com/express/","Diseño gráfico","Plantillas para redes sociales con Firefly integrado, animaciones y programación de publicaciones.","frm"],
+   ["Adobe Firefly","https://firefly.adobe.com","Imagen generativa","Imágenes, relleno generativo y video, entrenado para uso comercial seguro.","frm"],
+   ["Leonardo.Ai","https://leonardo.ai","Imagen generativa","Imágenes y arte de producto con modelos propios, personajes consistentes y video corto.","frm"],
+   ["Midjourney","https://www.midjourney.com","Imagen generativa","Imágenes artísticas de alta calidad estética para campañas y portadas.","pay"],
+   ["Ideogram","https://ideogram.ai","Imagen generativa","Generador de imágenes muy bueno con texto legible: pósteres, logos y banners.","frm"],
+   ["Freepik AI Suite","https://www.freepik.com/ai","Imagen generativa","Generador de imágenes y video, mejora de resolución y bancos de recursos.","frm"],
+   ["HeyGen","https://www.heygen.com","Video con avatares","Avatares parlantes, avatar propio, doblaje con sincronía de labios en más de 40 idiomas.","frm"],
+   ["Synthesia","https://www.synthesia.io","Video con avatares","Videos corporativos y de formación con avatares y plantillas.","frm"],
+   ["CapCut","https://www.capcut.com","Edición y generación de video","Edición para reels con subtítulos automáticos, plantillas, eliminación de fondo y efectos IA.","frm"],
+   ["Runway","https://runwayml.com","Edición y generación de video","Generación de video, extensión de escenas y edición avanzada con IA.","frm"],
+   ["Descript","https://www.descript.com","Edición y generación de video","Edita video y pódcast editando el texto; elimina muletillas y clona tu voz.","frm"],
+   ["Opus Clip","https://www.opus.pro","Edición y generación de video","Convierte un video largo (clase o webinar) en clips virales con subtítulos.","frm"],
+   ["VEED","https://www.veed.io","Edición y generación de video","Editor en línea con subtítulos, traducción, avatares y teleprompter.","frm"],
+   ["Google Flow / Veo","https://labs.google/flow","Edición y generación de video","Generación cinematográfica de video con audio a partir de texto o imágenes.","frm"],
+   ["Kling AI","https://klingai.com","Edición y generación de video","Generación de video realista a partir de texto o imagen.","frm"],
+   ["ElevenLabs","https://elevenlabs.io","Voz y música","Locuciones realistas, clonación de voz con consentimiento y doblaje.","frm"],
+   ["Suno","https://suno.com","Voz y música","Música original con letra para spots y jingles; revisa la licencia comercial.","frm"],
+   ["Copy.ai","https://www.copy.ai","Copy y anuncios","Flujos de marketing y generación de textos publicitarios.","frm"],
+   ["AdCreative.ai","https://www.adcreative.ai","Copy y anuncios","Creatividades publicitarias con puntuación de rendimiento predicho.","pay"],
+   ["Meta Business Suite","https://business.facebook.com","Copy y anuncios","Programación de publicaciones y anuncios con herramientas de IA en Facebook e Instagram.","free"]
+  ],
+  demos:[
+   {t:"Campaña de lanzamiento en Canva",tool:"ChatGPT/Claude/Gemini + Canva",obj:"Producir en una tarde un kit de piezas (post, historia, banner y flyer) para promocionar un programa académico.",
+    steps:["Genera con un LLM el copy: 5 titulares, 3 textos y llamadas a la acción (prompt).","En Canva, configura el <b>Kit de marca</b> (logo, colores y fuentes).","Usa Magic Design con tu titular para obtener diseños base.","Aplica «Redimensionar» para post, historia, LinkedIn y flyer A4.","Revisa la ortografía, los datos (fechas y precios) y la accesibilidad (contraste y texto alternativo).","Programa las publicaciones y define la métrica (clics o inscripciones)."],
+    prompt:"Actúa como redactor publicitario educativo.\nProducto: [programa / curso / evento] de [institución].\nPúblico: [docentes universitarios de 30-55 años en Perú].\nBeneficio principal: [ ]. Diferencial: [ ]. CTA: [inscríbete / escribe al WhatsApp].\nGenera:\n- 5 titulares (máx. 8 palabras)\n- 3 textos para Instagram (máx. 120 palabras, con emojis moderados y 5 hashtags)\n- 1 texto para LinkedIn (tono profesional)\n- 2 guiones de reel de 20 s (gancho en los 3 primeros segundos)\nNo inventes datos: deja [corchetes] donde falte información.",
+    res:"Kit de campaña consistente, multiformato y listo para programar."},
+   {t:"Video promocional con avatar",tool:"HeyGen (o Synthesia) + CapCut",obj:"Crear un video de 45 s con un presentador virtual (o tu propio avatar) y subtítulos para redes.",
+    steps:["Escribe el guion (máx. 110 palabras para 45 s).","En HeyGen elige un avatar o crea el tuyo <b>con consentimiento</b>.","Pega el guion, elige la voz y el idioma, y ajusta las pausas.","Exporta en vertical (9:16) y en horizontal (16:9).","En CapCut agrega subtítulos automáticos, el logo, música libre y el CTA final.","Indica en la descripción que el video usa un avatar generado con IA."],
+    prompt:"Guion para un video promocional de 45 segundos con avatar.\nTema: [ ]. Público: [ ].\nEstructura:\n0-3 s: gancho con una pregunta.\n3-30 s: 3 beneficios concretos.\n30-40 s: prueba social o dato verificable.\n40-45 s: llamada a la acción.\nLenguaje sencillo, frases cortas para leerse con subtítulos, máx. 110 palabras.",
+    res:"Video profesional en minutos, sin estudio de grabación."},
+   {t:"De la clase grabada a 5 reels",tool:"Opus Clip o Descript + CapCut",obj:"Reutilizar un webinar o una master class para generar clips cortos de difusión.",
+    steps:["Sube el video largo (YouTube o archivo) a Opus Clip o Descript.","Deja que la IA detecte los momentos clave y genere los clips.","Elige los 5 mejores y revisa que tengan sentido sin contexto.","Ajusta los subtítulos (ortografía de términos técnicos) y la marca.","Agrega un título en pantalla y el CTA en cada clip.","Publica uno por día y compara métricas para repetir el formato ganador."],
+    prompt:"A partir de esta transcripción de mi clase, identifica 5 fragmentos de 30 a 60 s que funcionen como clips independientes.\nPara cada uno: minuto de inicio y fin, título gancho (máx. 6 palabras), por qué es atractivo y texto para la publicación con CTA.",
+    res:"Una semana de contenido a partir de una sola grabación."}
+  ]
+};
+
+/* ===== ERRORES ===== */
+const ERRORS=[
+ ["Implementar sin objetivo","«Usemos IA» sin un problema definido.","Pilotos que no se usan y gasto sin impacto.","Parte del problema y de un indicador medible; elige la herramienta al final."],
+ ["Confiar en alucinaciones","Aceptar citas, datos o normas que el modelo inventó.","Referencias falsas en tesis o artículos y daño reputacional.","Verifica cada cita (DOI y texto original); usa herramientas con fuentes."],
+ ["Subir datos sensibles","Pegar notas, DNI o historias clínicas en cuentas personales.","Incumplir la Ley N.º 29733 de protección de datos y fugas de información.","Anonimiza; usa cuentas institucionales con protección de datos."],
+ ["Delegar el juicio","Calificar o decidir sobre personas solo con IA.","Injusticias, sesgos y reclamos.","Mantén siempre un humano en el circuito para las decisiones que afectan a personas."],
+ ["Prohibir sin enseñar","Vetar la IA en lugar de formar en su uso.","Uso oculto e inequidad entre estudiantes.","Define niveles de uso permitido y enseña la declaración de uso."],
+ ["Usar detectores como prueba","Sancionar por el porcentaje de un detector de IA.","Falsos positivos que afectan sobre todo a no nativos.","Úsalos solo como alerta; evalúa el proceso (borradores, defensa oral)."],
+ ["Ignorar los sesgos","No revisar estereotipos en textos e imágenes.","Material excluyente y discriminación.","Revisa con criterios de diversidad; pide varias alternativas."],
+ ["Prompts vagos","«Hazme una clase de estadística».","Resultados genéricos e inútiles.","Usa rol, contexto, tarea, formato y criterios; itera."],
+ ["Dependencia cognitiva","El estudiante copia sin procesar.","Aprendizaje superficial y pérdida de habilidades.","Tutoría socrática, metacognición y evaluación del proceso."],
+ ["Saturación de herramientas","Probar 30 apps sin profundizar en ninguna.","Fatiga docente y costos dispersos.","Un catálogo institucional corto y aprobado; profundiza en pocas."],
+ ["No capacitar","Entregar licencias sin formación.","Baja adopción y malas prácticas.","Alfabetización en IA por perfiles, con práctica y comunidad."],
+ ["Sin gobernanza","No hay política, responsables ni registro de usos.","Riesgos legales y decisiones inconsistentes.","Comité, guía de uso, inventario y revisión anual."],
+ ["Olvidar derechos de autor","Usar imágenes o voces de terceros, o subir libros completos.","Infracciones y reclamos.","Revisa las licencias, usa material propio o abierto y cita."],
+ ["No medir el impacto","Asumir que la IA mejoró el aprendizaje.","Decisiones sin evidencia.","Línea base, grupo de comparación e indicadores de aprendizaje."],
+ ["Automatizar procesos malos","Acelerar un flujo ineficiente.","Errores más rápidos y a mayor escala.","Rediseña el proceso antes de automatizarlo."]
+];
+function errorsHTML(){
+  return `<h2><span class="tag-sec">Diagnóstico</span>15 errores frecuentes al implementar IA</h2>
+  <div class="toolbar"><input class="search" type="search" placeholder="Buscar un error (ej.: datos, detector, sesgo)…" aria-label="Buscar errores" id="errSearch"></div>
+  <div class="grid g3" id="errGrid">${ERRORS.map((e,i)=>`<article class="card" data-q="${esc(norm(e.join(" ")))}">
+    <div class="plabel"><span>Error ${String(i+1).padStart(2,"0")}</span></div>
+    <h3>${esc(e[0])}</h3><p class="small muted" style="margin-bottom:10px">${esc(e[1])}</p>
+    <p class="small" style="color:#e9a07a"><b>⚠ Consecuencia:</b> ${esc(e[2])}</p>
+    <p class="small" style="color:var(--g1);margin-top:6px"><b style="color:var(--ac)">✓ Cómo evitarlo:</b> ${esc(e[3])}</p></article>`).join("")}</div>`;
+}
+TOPICS.errores={
+  ico:"⚠️",color:"#f5a623",
+  title:"Errores al <span class='grad'>implementar IA</span>",
+  lead:"Lo que sale mal cuando docentes, estudiantes, investigadores e instituciones adoptan IA sin método, y cómo prevenirlo con buenas prácticas, controles y evidencia.",
+  pre:errorsHTML,
+  theory:[
+   ["🧠","Sesgo de automatización","Tendemos a confiar demasiado en lo que dice una máquina. Contrarréstalo con verificación obligatoria."],
+   ["🎭","Alucinaciones","Los LLM generan texto plausible, no necesariamente verdadero: el riesgo es mayor con citas, cifras y normas."],
+   ["🔒","Privacidad","Todo lo que pegas puede almacenarse. Las cuentas institucionales y la anonimización son la primera barrera."],
+   ["📏","Evidencia","Una implementación se justifica con indicadores, no con entusiasmo: mide antes y después."]
+  ],
+  flowTitle:"Proceso: implementación de IA sin errores (ciclo PDCA)",
+  flow:[["Problema","Definir la necesidad y el indicador de éxito."],["Riesgos","Evaluar privacidad, sesgo y legalidad."],["Piloto","Grupo pequeño, con supervisión humana."],["Verificar","Medir el impacto y registrar incidentes."],["Capacitar","Formar a los usuarios con casos reales."],["Escalar o corregir","Decidir con evidencia y actualizar la política."]],
+  cats:["Marcos y guías","Verificación","Privacidad y seguridad","Evaluación del impacto"],
+  toolsTitle:"Recursos y herramientas para prevenir errores",
+  tools:[
+   ["AI Incident Database","https://incidentdatabase.ai","Marcos y guías","Casos reales de fallos de IA para aprender de errores ajenos.","free"],
+   ["NIST AI RMF Playbook","https://airc.nist.gov/airmf-resources/playbook/","Marcos y guías","Acciones sugeridas para gobernar, mapear, medir y gestionar riesgos de IA.","free"],
+   ["UNESCO: IA generativa en educación","https://www.unesco.org/es/articles/guia-para-el-uso-de-ia-generativa-en-educacion-e-investigacion","Marcos y guías","Recomendaciones para un uso centrado en las personas.","free"],
+   ["Google Scholar","https://scholar.google.com","Verificación","Comprueba que una referencia exista y coincida con lo citado.","free"],
+   ["Crossref Search","https://search.crossref.org","Verificación","Valida DOIs y metadatos de publicaciones.","free"],
+   ["Retraction Watch Database","https://retractiondatabase.org","Verificación","Revisa si un artículo citado fue retractado.","free"],
+   ["scite","https://scite.ai","Verificación","Verifica si las citas apoyan o contradicen una afirmación.","pay"],
+   ["Ley N.º 29733 y su reglamento (D. S. 016-2024-JUS)","https://www.gob.pe/institucion/anpd/normas-legales/6554453-16-2024-jus","Privacidad y seguridad","Marco peruano de protección de datos personales aplicable al uso de IA.","free"],
+   ["OWASP Top 10 para aplicaciones LLM","https://genai.owasp.org","Privacidad y seguridad","Riesgos de seguridad en aplicaciones con LLM: inyección de prompts y fugas de datos.","free"],
+   ["Microsoft Presidio","https://microsoft.github.io/presidio/","Privacidad y seguridad","Herramienta libre para detectar y anonimizar datos personales en textos.","os"],
+   ["AI Assessment Scale","https://aiassessmentscale.com","Evaluación del impacto","Define niveles de uso de IA en las evaluaciones para evitar ambigüedades.","free"],
+   ["Google Forms + Looker Studio","https://lookerstudio.google.com","Evaluación del impacto","Encuestas antes y después y tableros para medir el impacto de un piloto.","free"]
+  ],
+  demos:[
+   {t:"Pre-mortem de un proyecto de IA",tool:"Claude / ChatGPT / Gemini",obj:"Anticipar por qué podría fracasar una implementación antes de lanzarla.",
+    steps:["Describe el proyecto: objetivo, usuarios, datos, herramienta y plazo.","Pega el prompt y pide el análisis «como si ya hubiera fracasado».","Prioriza con tu equipo los 5 riesgos más probables.","Define para cada uno un control y un responsable.","Agrega los indicadores de alerta temprana al plan del piloto.","Revisa la lista al terminar el piloto: ¿qué ocurrió realmente?"],
+    prompt:"Imagina que es dentro de 6 meses y el proyecto «[nombre]» fracasó.\nProyecto: [objetivo, usuarios, datos que usa, herramienta de IA, plazo].\n1) Enumera 10 causas plausibles del fracaso (técnicas, pedagógicas, legales, humanas).\n2) Para cada una: probabilidad (1-5), impacto (1-5) y señal de alerta temprana.\n3) Propón un control preventivo concreto por causa.\n4) Indica qué decisiones requieren aprobación humana obligatoria.",
+    res:"Mapa de riesgos con controles antes de invertir tiempo y dinero."},
+   {t:"Auditoría de alucinaciones en un texto",tool:"LLM + Google Scholar/Crossref",obj:"Detectar referencias inventadas y afirmaciones sin respaldo en un documento asistido por IA.",
+    steps:["Pega el texto (tesis, informe o artículo) en el asistente.","Pide la lista de afirmaciones verificables y de referencias.","Verifica cada referencia en Google Scholar o Crossref (título, autores, año y DOI).","Marca: verificada / no existe / existe pero no dice eso.","Corrige o elimina lo no verificado.","Documenta el uso de IA y la verificación en la sección de métodos o en la declaración."],
+    prompt:"Analiza el texto siguiente y extrae:\n1) Todas las referencias bibliográficas en una tabla: autor | año | título | revista | DOI (si aparece).\n2) Las afirmaciones con datos numéricos o normativos que requieren fuente.\n3) Las afirmaciones que parecen generalizaciones sin respaldo.\nNo verifiques tú mismo ni completes datos faltantes: solo lista lo que debo comprobar.\nTexto: \"\"\"[pega aquí]\"\"\"",
+    res:"Lista de verificación que evita citas falsas y afirmaciones sin sustento."}
+  ]
+};
+
+/* ===== OTROS LLM Y MODELOS LOCALES (pestaña LLM favoritos) ===== */
+const LLM_OTHERS=[
+ ["DeepSeek","China","Sí (pesos abiertos)","Razonamiento matemático y de código a bajo costo","https://chat.deepseek.com"],
+ ["Mistral (Le Chat)","Francia (UE)","Parcial","Modelo europeo, rápido, multilingüe y alineado con el RGPD","https://chat.mistral.ai"],
+ ["Kimi (Moonshot AI)","China","Sí (Kimi K2)","Contexto muy largo, agentes y lectura de muchos documentos","https://www.kimi.com"],
+ ["Latam-GPT (CENIA)","Chile / América Latina","Sí","Contexto, cultura y español latinoamericano; orientado a investigadores y desarrolladores","https://www.latamgpt.org"],
+ ["Qwen (Alibaba)","China","Sí","Familia abierta muy usada en local; visión, razonamiento y código","https://chat.qwen.ai"],
+ ["Grok (xAI)","EE. UU.","Parcial","Acceso a información en tiempo real de X","https://grok.com"],
+ ["Meta AI / Llama","EE. UU.","Sí (Llama)","Base de muchos modelos abiertos, incluido Latam-GPT 1.0","https://www.meta.ai"],
+ ["Microsoft Copilot","EE. UU.","No","Integrado a Windows, Edge y Microsoft 365","https://copilot.microsoft.com"],
+ ["GLM (Z.ai)","China","Sí","Agentes, programación y uso de herramientas","https://chat.z.ai"],
+ ["Gemma (Google)","EE. UU.","Sí","Modelos abiertos ligeros de Google para usar en local","https://ai.google.dev/gemma"],
+ ["gpt-oss (OpenAI)","EE. UU.","Sí","Modelos de razonamiento con pesos abiertos de OpenAI","https://openai.com/open-models/"],
+ ["Cohere (Command)","Canadá","Parcial","Uso empresarial, RAG y multilingüe","https://cohere.com"]
+];
+function llmOthersHTML(){
+  return `<h2><span class="tag-sec">Panorama internacional</span>Otros LLM importantes</h2>
+  <p class="muted" style="margin-bottom:14px">Modelos de distintos países y enfoques. «Pesos abiertos» significa que el modelo se puede descargar y ejecutar en tu propia computadora o servidor.</p>
+  <div class="tscroll"><table><thead><tr><th>Modelo</th><th>Origen</th><th>Pesos abiertos</th><th>Fortaleza principal</th><th>Acceso</th></tr></thead><tbody>
+  ${LLM_OTHERS.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td><a href="${r[4]}" target="_blank" rel="noopener">Abrir ↗</a></td></tr>`).join("")}</tbody></table></div>
+  <div class="callout"><b>Privacidad:</b> antes de subir datos de estudiantes o de investigación, revisa en qué país se almacenan y si se usan para entrenar. Con modelos abiertos ejecutados en local (Ollama, LM Studio) los datos no salen de tu equipo.</div>`;
+}
+TOPICS.favoritos.title="LLM favoritos: <span class='grad'>Claude, Gemini, ChatGPT y más</span>";
+TOPICS.favoritos.lead="Los tres grandes modelos multimodales comparados función por función (skills, prompts avanzados, agentes, MCP, comandos, Claude Cowork, Claude Code, plugins y conectores), además de otros LLM internacionales como DeepSeek, Mistral, Kimi, Qwen y Latam-GPT, y de las aplicaciones para ejecutar modelos en tu propia computadora.";
+TOPICS.favoritos.pre=()=>llmHTML()+llmOthersHTML();
+TOPICS.favoritos.cats.push("Otros LLM internacionales","Apps para ejecutar modelos","Asistentes especializados");
+TOPICS.favoritos.tools.push(
+ ["DeepSeek","https://chat.deepseek.com","Otros LLM internacionales","Chat gratuito con modelos de razonamiento; pesos abiertos para usar en local.","free"],
+ ["Mistral Le Chat","https://chat.mistral.ai","Otros LLM internacionales","Asistente europeo con búsqueda, documentos, agentes y generación de imágenes.","frm"],
+ ["Kimi","https://www.kimi.com","Otros LLM internacionales","Asistente de Moonshot AI con contexto largo, búsqueda profunda y presentaciones.","frm"],
+ ["Latam-GPT","https://www.latamgpt.org","Otros LLM internacionales","Primer gran modelo abierto de América Latina, liderado por el CENIA (Chile).","os"],
+ ["Qwen Chat","https://chat.qwen.ai","Otros LLM internacionales","Chat de Alibaba con modelos de razonamiento, visión, imágenes y video.","free"],
+ ["Grok","https://grok.com","Otros LLM internacionales","Asistente de xAI con información en tiempo real.","frm"],
+ ["Meta AI","https://www.meta.ai","Otros LLM internacionales","Asistente de Meta basado en Llama, también en WhatsApp e Instagram.","free"],
+ ["Microsoft Copilot","https://copilot.microsoft.com","Otros LLM internacionales","Asistente de Microsoft integrado a Windows, Edge y Microsoft 365.","frm"],
+ ["Z.ai (GLM)","https://chat.z.ai","Otros LLM internacionales","Modelos GLM abiertos con buen desempeño en agentes y código.","free"],
+ ["Latam-GPT en Hugging Face","https://huggingface.co/latam-gpt","Apps para ejecutar modelos","Descarga el modelo abierto Llama-3.1-70B-LatamGPT para usarlo con vLLM o Transformers (requiere GPU potente).","os"],
+ ["Ollama","https://ollama.com","Apps para ejecutar modelos","Descarga y ejecuta modelos abiertos (Llama, Qwen, DeepSeek, Gemma, Mistral) con un comando; incluye app de escritorio.","os"],
+ ["LM Studio","https://lmstudio.ai","Apps para ejecutar modelos","App de escritorio para descargar y chatear con modelos locales, con RAG de documentos, servidor local compatible con OpenAI y MCP.","free"],
+ ["Jan","https://www.jan.ai","Apps para ejecutar modelos","Alternativa abierta a ChatGPT que funciona sin conexión en tu computadora.","os"],
+ ["GPT4All","https://www.nomic.ai/gpt4all","Apps para ejecutar modelos","App local y privada con chat sobre tus documentos (LocalDocs).","os"],
+ ["AnythingLLM","https://anythingllm.com","Apps para ejecutar modelos","Escritorio o servidor: RAG sobre tus archivos y agentes con modelos locales o en la nube.","os"],
+ ["Msty","https://msty.ai","Apps para ejecutar modelos","Interfaz para usar modelos locales y en la nube en paralelo y compararlos.","frm"],
+ ["Open WebUI","https://openwebui.com","Apps para ejecutar modelos","Interfaz web autoalojada tipo ChatGPT para Ollama y otras API, ideal para un laboratorio o una facultad.","os"],
+ ["Hugging Face","https://huggingface.co/models","Apps para ejecutar modelos","El mayor repositorio de modelos, datasets y demos (Spaces) de IA abierta.","free"],
+ ["Pinokio","https://github.com/pinokiocomputer/pinokio","Apps para ejecutar modelos","Instalador de un clic para apps de IA abiertas (imagen, voz y LLM) en tu computadora.","os"],
+ ["Perplexity","https://www.perplexity.ai","Asistentes especializados","Buscador conversacional que combina varios modelos y cita fuentes.","frm"],
+ ["Manus","https://manus.im","Asistentes especializados","Agente general que investiga, crea documentos y sitios web de forma autónoma.","frm"]
+);
+TOPICS.favoritos.demos.push(
+ {t:"Ejecutar un LLM en tu computadora con Ollama",tool:"Ollama (o LM Studio con interfaz gráfica)",obj:"Usar un modelo abierto sin internet y sin enviar datos a terceros, ideal para datos sensibles de investigación.",
+  steps:["Descarga Ollama desde ollama.com (Windows, macOS o Linux) e instálalo.","Revisa tu equipo: con 8 GB de RAM usa modelos de 3B a 4B parámetros; con 16 GB o más, de 7B a 14B.","Abre la terminal y descarga un modelo (comando 1).","Chatea con él (comando 2) o usa la app de escritorio de Ollama.","Para una interfaz tipo ChatGPT, conecta Open WebUI o AnythingLLM a Ollama.","Compara sus respuestas con las de un modelo en la nube y documenta las diferencias."],
+  prompt:"# 1. Descargar modelos (elige según tu RAM)\nollama pull gemma3:4b\nollama pull qwen3:8b\nollama pull deepseek-r1:8b\n\n# 2. Chatear en la terminal\nollama run qwen3:8b\n\n# 3. Ver los modelos instalados\nollama list\n\n# 4. Prompt de prueba dentro del chat\nResume en 5 viñetas el siguiente resumen de tesis y propón 3 palabras clave: [pega el texto]",
+  res:"Un asistente privado que funciona sin conexión y sin costo por uso."}
+);
+
+/* ===== GAMIFICACIÓN (pestaña IA en aprendizaje) ===== */
+TOPICS.aprendizaje.cats.splice(2,0,"Gamificación");
+TOPICS.aprendizaje.tools.push(
+ ["Padlet Arcade","https://arcade.padlet.com","Gamificación","Crea con IA juegos educativos en menos de un minuto a partir de un tema, un documento o un enlace, con tabla de posiciones.","frm"],
+ ["Kahoot!","https://kahoot.com","Gamificación","Concursos en vivo o a tu ritmo; genera preguntas con IA a partir de un PDF, un enlace o un tema.","frm"],
+ ["Blooket","https://www.blooket.com","Gamificación","Juegos de preguntas con distintos modos (torre, carrera, café) para repaso.","frm"],
+ ["Gimkit","https://www.gimkit.com","Gamificación","Juegos de estrategia con preguntas, creados por estudiantes, con economía virtual.","frm"],
+ ["Educaplay","https://www.educaplay.com","Gamificación","Crucigramas, sopas de letras, mapas interactivos y más, en español.","frm"],
+ ["Wordwall","https://wordwall.net/es","Gamificación","Plantillas de juegos (ruleta, emparejar, laberinto) para el aula o el LMS.","frm"],
+ ["Baamboozle","https://www.baamboozle.com","Gamificación","Juegos por equipos para proyectar en clase, sin cuentas de estudiantes.","frm"],
+ ["Genially","https://genially.com","Gamificación","Escape rooms, breakouts y presentaciones interactivas con asistente de IA.","frm"],
+ ["Deck.Toys","https://deck.toys","Gamificación","Rutas de aprendizaje tipo mapa de juego con actividades desbloqueables.","frm"],
+ ["Mentimeter","https://www.mentimeter.com","Gamificación","Cuestionarios en vivo, nubes de palabras y votaciones con generación por IA.","frm"],
+ ["Minecraft Education","https://education.minecraft.net","Gamificación","Mundos de aprendizaje basados en juego, incluidos módulos sobre IA y programación.","pay"],
+ ["ClassDojo","https://www.classdojo.com","Gamificación","Puntos, insignias y comunicación con el grupo para gestionar la participación.","free"]
+);
+TOPICS.aprendizaje.theory.push(["🎮","Gamificación","Mecánicas de juego (puntos, niveles, retos, tablas de posiciones) que aumentan la motivación; la IA genera juegos a partir del contenido del curso."]);
+TOPICS.aprendizaje.demos.push(
+ {t:"Juego de repaso con Padlet Arcade o Kahoot!",tool:"Padlet Arcade / Kahoot!",obj:"Convertir una lectura o una unidad en un juego de repaso en menos de 5 minutos.",
+  steps:["Entra a arcade.padlet.com (o kahoot.com) e inicia sesión.","Pega el tema, sube el PDF de la unidad o el enlace de la lectura.","Elige el tipo de juego (preguntas, emparejar, ordenar o completar).","<b>Revisa cada pregunta</b>: corrige ambigüedades y respuestas incorrectas.","Comparte el enlace o el código QR; úsalo como evaluación formativa de bajo riesgo.","Revisa la tabla de posiciones y los errores frecuentes para la retroalimentación."],
+  prompt:"Si generas las preguntas con un LLM antes de cargarlas:\nCrea 12 preguntas de opción múltiple sobre [tema] a partir del texto adjunto.\n- 4 alternativas, solo una correcta, sin «todas las anteriores».\n- Distractores basados en errores comunes de los estudiantes.\n- Nivel: 4 de recuerdo, 5 de comprensión y 3 de aplicación.\n- Formato CSV: pregunta;alt1;alt2;alt3;alt4;correcta;tiempo(20)",
+  res:"Juego listo para la clase, con datos de desempeño para retroalimentar."}
+);
+
+/* ===== PUBLICAR ARTEFACTO WEB ===== */
+TOPICS.publicar={
+  ico:"🌐",color:"#f5a623",
+  title:"Publicar un <span class='grad'>artefacto web</span>",
+  lead:"Cómo poner en internet, con un enlace para compartir, lo que creas con IA (páginas HTML, juegos, cuestionarios, simuladores o tableros): servicios de arrastrar y soltar, Google Apps Script, GitHub Pages y plataformas de despliegue, muchas de ellas gratuitas.",
+  theory:[
+   ["📄","¿Qué es un artefacto?","Una página o miniaplicación (HTML, CSS y JavaScript) generada con IA, por ejemplo con Claude, Gemini Canvas o ChatGPT, que funciona en el navegador."],
+   ["⚡","Sitio estático","Archivos que se sirven tal cual, sin servidor propio. Es lo más simple, rápido y gratuito de publicar."],
+   ["🔗","Dominio y enlace","Todos los servicios dan una URL gratuita; muchos permiten un dominio propio como drluisbravo.com/proyecto."],
+   ["🔐","Datos y seguridad","No publiques claves de API ni datos personales en el código; un sitio estático es visible para cualquiera."]
+  ],
+  flowTitle:"Proceso: de la idea al enlace público",
+  flow:[["Generar","Pide a la IA una página en un solo archivo index.html."],["Probar","Ábrela en tu navegador y revísala en el celular."],["Elegir servicio","Arrastrar y soltar, Apps Script o GitHub."],["Publicar","Sube el archivo y obtén la URL."],["Compartir","Enlace, código QR o inserción en el LMS."],["Actualizar","Reemplaza el archivo; el enlace se mantiene."]],
+  cats:["Arrastrar y soltar","Google","Repositorios Git","Plataformas de despliegue","Crear y publicar con IA","Editores en línea"],
+  toolsTitle:"Servicios para publicar",
+  tools:[
+   ["Netlify Drop","https://app.netlify.com/drop","Arrastrar y soltar","Arrastra la carpeta de tu sitio y obtén una URL pública en segundos; crea una cuenta gratuita para conservarla.","frm"],
+   ["Tiiny.host","https://tiiny.host","Arrastrar y soltar","Sube un HTML, un ZIP o un PDF y obtén un enlace al instante.","frm"],
+   ["Surge","https://surge.sh","Arrastrar y soltar","Publica una carpeta estática desde la terminal con un solo comando.","free"],
+   ["Google Apps Script","https://script.google.com","Google","Publica una aplicación web (HtmlService) conectada a Sheets, Forms, Gmail y Drive; gratis con tu cuenta Google.","free"],
+   ["Google Sites","https://sites.google.com","Google","Sitios sencillos donde puedes insertar tu artefacto HTML o tu aplicación de Apps Script.","free"],
+   ["Firebase Hosting","https://firebase.google.com/products/hosting","Google","Hosting rápido de Google con SSL y dominio propio.","frm"],
+   ["GitHub Pages","https://pages.github.com","Repositorios Git","Publica gratis desde un repositorio; es lo que usas en drluisbravo.com.","free"],
+   ["GitLab Pages","https://docs.gitlab.com/user/project/pages/","Repositorios Git","Alternativa a GitHub Pages con integración continua.","free"],
+   ["Vercel","https://vercel.com","Plataformas de despliegue","Despliegue automático desde Git, ideal para Next.js y frontends.","frm"],
+   ["Cloudflare Pages","https://pages.cloudflare.com","Plataformas de despliegue","Hosting estático global y gratuito, con subida directa de archivos o desde Git.","frm"],
+   ["Render","https://render.com","Plataformas de despliegue","Sitios estáticos y servicios con backend (Python, Node).","frm"],
+   ["Hugging Face Spaces","https://huggingface.co/spaces","Plataformas de despliegue","Publica demos de IA con Gradio, Streamlit o HTML estático.","frm"],
+   ["Streamlit Community Cloud","https://streamlit.io/cloud","Plataformas de despliegue","Publica apps de datos en Python directamente desde GitHub.","free"],
+   ["Claude (artifacts)","https://claude.ai","Crear y publicar con IA","Crea páginas y apps interactivas en la conversación y publícalas con un enlace.","frm"],
+   ["Gemini Canvas","https://gemini.google.com","Crear y publicar con IA","Genera apps web y cuestionarios en Canvas y compártelos con un enlace.","frm"],
+   ["ChatGPT (Canvas y Sites)","https://chatgpt.com","Crear y publicar con IA","Crea código en Canvas; en planes de empresa, Sites publica páginas internas.","frm"],
+   ["Google AI Studio (Build)","https://aistudio.google.com","Crear y publicar con IA","Describe una app y la genera con Gemini; se puede desplegar en Cloud Run.","frm"],
+   ["Bolt.new","https://bolt.new","Crear y publicar con IA","Genera aplicaciones web completas desde un prompt y las publica.","frm"],
+   ["Lovable","https://lovable.dev","Crear y publicar con IA","Construye apps web conversando y las publica con un clic.","frm"],
+   ["v0","https://v0.app","Crear y publicar con IA","Genera interfaces y apps con React y las despliega en Vercel.","frm"],
+   ["Replit","https://replit.com","Editores en línea","Entorno de programación en el navegador con agente de IA y despliegue.","frm"],
+   ["CodePen","https://codepen.io","Editores en línea","Prueba y comparte fragmentos de HTML, CSS y JS al instante.","frm"],
+   ["StackBlitz","https://stackblitz.com","Editores en línea","Entorno de desarrollo web completo en el navegador.","frm"]
+  ],
+  demos:[
+   {t:"Publicar en 30 segundos con Netlify Drop",tool:"Netlify Drop",obj:"Obtener un enlace público para un artefacto HTML generado con IA.",
+    steps:["Guarda tu página como <b>index.html</b> dentro de una carpeta (con sus imágenes, si las tiene).","Entra a app.netlify.com/drop.","Arrastra la <b>carpeta</b> (no solo el archivo) al recuadro.","Copia la URL que aparece (algo.netlify.app).","Crea una cuenta gratuita para que el sitio no se elimine y para cambiar el nombre del subdominio.","Para actualizar, vuelve a arrastrar la carpeta en Deploys."],
+    prompt:"Prompt para generar el artefacto antes de publicarlo:\nCrea una página web en UN SOLO archivo index.html (HTML, CSS y JS juntos, sin dependencias externas salvo Google Fonts) sobre [tema].\nRequisitos: modo oscuro, adaptable a celular, accesible (contraste, etiquetas alt y navegación con teclado), un cuestionario interactivo de 5 preguntas con retroalimentación inmediata y un pie con el autor.\nNo uses localStorage ni claves de API.",
+    res:"Tu artefacto en línea con un enlace para compartir con los estudiantes."},
+   {t:"Aplicación web con Google Apps Script",tool:"Google Apps Script",obj:"Publicar una página que además puede leer o escribir en Google Sheets.",
+    steps:["Entra a script.google.com → <b>Nuevo proyecto</b>.","Pega el código del archivo Code.gs (abajo).","Menú + → <b>HTML</b> → nómbralo <b>index</b> y pega tu página.","<b>Implementar → Nueva implementación →</b> tipo «Aplicación web».","Ejecutar como: Yo. Quién tiene acceso: Cualquier usuario. Pulsa Implementar y autoriza.","Copia la URL que termina en /exec. Con cuentas personales, Google muestra un aviso en la parte superior de la página."],
+    prompt:"// Code.gs\nfunction doGet() {\n  return HtmlService.createHtmlOutputFromFile('index')\n    .setTitle('Mi artefacto IA')\n    .addMetaTag('viewport', 'width=device-width, initial-scale=1');\n}\n\n// Opcional: guardar respuestas en una hoja de cálculo\nfunction guardar(datos) {\n  const hoja = SpreadsheetApp.openById('ID_DE_TU_HOJA').getSheetByName('Respuestas');\n  hoja.appendRow([new Date(), datos.nombre, datos.puntaje]);\n  return 'ok';\n}\n\n// En index.html llama a la función así:\n// google.script.run.withSuccessHandler(r => alert('Guardado')).guardar({nombre:'Ana', puntaje:18});",
+    res:"Una app web gratuita que guarda datos en Sheets, sin servidor propio."},
+   {t:"Publicar en tu dominio con GitHub Pages",tool:"GitHub Pages",obj:"Publicar un nuevo artefacto como subpágina de drluisbravo.com.",
+    steps:["En GitHub crea un repositorio público con un nombre corto en minúsculas (p. ej., <b>quiz-ia</b>).","<b>Add file → Upload files</b>: sube index.html y confirma con Commit changes.","Ve a <b>Settings → Pages</b> → Deploy from a branch → main / (root) → Save.","Espera 1 o 2 minutos: quedará en drluisbravo.com/quiz-ia/.","Enlázalo desde tu sitio principal.","Para actualizar, sube de nuevo el archivo con el mismo nombre."],
+    prompt:"Estructura mínima del repositorio:\nquiz-ia/\n├── index.html      ← página principal (obligatorio)\n├── img/            ← imágenes (opcional)\n└── README.md       ← descripción (opcional)\n\nURL resultante:\nhttps://drluisbravo.com/quiz-ia/",
+    res:"Tus artefactos organizados bajo tu propio dominio y con historial de versiones."}
+  ]
+};
+
+/* ===== MACHINE LEARNING SIN PROGRAMAR ===== */
+TOPICS.ml={
+  ico:"🤖",color:"#f5a623",
+  title:"Machine learning <span class='grad'>sin programar</span>",
+  lead:"Plataformas visuales para entrenar modelos de aprendizaje automático (clasificar imágenes, sonidos, posturas o datos tabulares) sin escribir código: ideales para enseñar cómo «aprende» una IA y para prototipar investigaciones aplicadas.",
+  theory:[
+   ["🏷️","Aprendizaje supervisado","El modelo aprende de ejemplos etiquetados (foto → «plástico») para predecir la etiqueta de datos nuevos."],
+   ["🧮","Datos de calidad","Más importante que el algoritmo: ejemplos variados, balanceados entre clases y sin sesgos de iluminación, fondo o población."],
+   ["🎯","Evaluación","Separa datos de entrenamiento y de prueba; mide la exactitud, la matriz de confusión, la precisión y la sensibilidad."],
+   ["⚠️","Sobreajuste","Un modelo que memoriza el entrenamiento falla con datos reales. Prueba siempre con ejemplos que no vio."]
+  ],
+  flowTitle:"Proceso: ciclo de un proyecto de ML sin código",
+  flow:[["Problema","Qué clasificar o predecir y para qué."],["Datos","Recolectar y etiquetar ejemplos balanceados."],["Entrenar","Clic en «Entrenar» en la plataforma."],["Evaluar","Probar con datos nuevos y revisar errores."],["Exportar","Modelo para la web, el celular o una hoja de cálculo."],["Usar y mejorar","Integrar, monitorear y reentrenar."]],
+  cats:["Imagen, sonido y pose","Datos tabulares (AutoML)","Flujos visuales","Para educación","Visión y dispositivos"],
+  tools:[
+   ["Teachable Machine","https://teachablemachine.withgoogle.com","Imagen, sonido y pose","Entrena en el navegador clasificadores de imágenes, sonidos y posturas con la cámara; exporta a la web (TensorFlow.js).","free"],
+   ["Experiments with Google (IA)","https://experiments.withgoogle.com/collection/ai","Para educación","Experimentos interactivos para entender cómo funciona la IA (dibujo, música, visión).","free"],
+   ["TensorFlow Playground","https://playground.tensorflow.org","Para educación","Visualiza en el navegador cómo aprende una red neuronal, ajustando capas y neuronas.","free"],
+   ["Machine Learning for Kids","https://machinelearningforkids.co.uk","Para educación","Entrena modelos de texto, imágenes y números y úsalos en Scratch.","free"],
+   ["PictoBlox","https://thestempedia.com/product/pictoblox/","Para educación","Programación por bloques con extensiones de ML y visión por computador.","frm"],
+   ["Orange Data Mining","https://orangedatamining.com","Flujos visuales","Minería de datos y ML arrastrando bloques: clasificación, agrupamiento y visualización; libre.","os"],
+   ["KNIME Analytics Platform","https://www.knime.com","Flujos visuales","Flujos de análisis y ML con nodos visuales; gratuito para escritorio.","os"],
+   ["Weka","https://ml.cms.waikato.ac.nz/weka","Flujos visuales","Clásico software académico de ML con interfaz gráfica (Universidad de Waikato).","os"],
+   ["Altair AI Studio (RapidMiner)","https://altair.com/altair-rapidminer","Flujos visuales","Diseño visual de procesos de ciencia de datos y AutoML.","frm"],
+   ["Vertex AI AutoML","https://cloud.google.com/vertex-ai","Datos tabulares (AutoML)","Entrena modelos de imagen, texto y tablas en Google Cloud sin código.","pay"],
+   ["Amazon SageMaker Canvas","https://aws.amazon.com/sagemaker/ai/canvas/","Datos tabulares (AutoML)","ML visual para predicciones con datos tabulares en AWS.","pay"],
+   ["Azure Machine Learning (designer y AutoML)","https://azure.microsoft.com/products/machine-learning","Datos tabulares (AutoML)","Diseñador de arrastrar y soltar y ML automatizado en Microsoft Azure.","pay"],
+   ["Hugging Face AutoTrain","https://huggingface.co/autotrain","Datos tabulares (AutoML)","Ajusta modelos de texto, imagen y tablas subiendo tus datos.","frm"],
+   ["Akkio","https://www.akkio.com","Datos tabulares (AutoML)","Predicciones y análisis con IA a partir de hojas de cálculo.","pay"],
+   ["Julius AI","https://julius.ai","Datos tabulares (AutoML)","Pide en lenguaje natural regresiones, clasificaciones y gráficos sobre tus datos.","frm"],
+   ["Roboflow","https://roboflow.com","Visión y dispositivos","Etiqueta imágenes y entrena detectores de objetos; despliegue en la web o en el celular.","frm"],
+   ["Edge Impulse","https://edgeimpulse.com","Visión y dispositivos","ML para sensores y microcontroladores (Arduino, Raspberry Pi) sin código.","frm"],
+   ["Create ML (Apple)","https://developer.apple.com/machine-learning/create-ml/","Visión y dispositivos","Entrena modelos de imagen, sonido y texto en Mac con interfaz gráfica.","free"]
+  ],
+  demos:[
+   {t:"Clasificador de imágenes con Teachable Machine",tool:"Teachable Machine",obj:"Entrenar en 15 minutos un modelo que reconozca 3 clases (p. ej., residuos: plástico, papel y orgánico) y publicarlo en la web.",
+    steps:["Entra a teachablemachine.withgoogle.com → <b>Comenzar → Proyecto de imagen</b>.","Crea 3 clases y captura al menos 50 imágenes por clase con la cámara (o súbelas), variando el fondo y la luz.","Pulsa <b>Entrenar modelo</b> y espera.","Prueba en la vista previa con objetos NUEVOS: anota los errores (matriz de confusión).","Mejora los datos de la clase que falla y reentrena.","<b>Exportar modelo → Subir</b> para obtener un enlace, o descarga TensorFlow.js y publícalo como artefacto web."],
+    prompt:"Prompt para crear la página que usa tu modelo (pégalo en Claude, Gemini o ChatGPT):\nCrea un index.html que cargue mi modelo de Teachable Machine desde esta URL: [URL del modelo]\n- Usa la webcam y muestra la clase predicha con su porcentaje en barras.\n- Diseño oscuro y adaptable a celular, con botón para iniciar y detener la cámara.\n- Incluye una sección «¿Cómo aprendió este modelo?» con 4 pasos.\nUsa las librerías oficiales de TensorFlow.js y de Teachable Machine desde CDN.",
+    res:"Un modelo funcional y una página pública para demostrar el ML en clase."},
+   {t:"Predecir el riesgo académico con Orange",tool:"Orange Data Mining",obj:"Construir un clasificador (árbol de decisión) que identifique estudiantes en riesgo a partir de datos anonimizados.",
+    steps:["Prepara un CSV <b>anonimizado</b>: asistencia, notas parciales, entregas y una columna «riesgo» (sí/no).","En Orange arrastra <b>File</b> y carga el CSV; define «riesgo» como variable objetivo (target).","Conecta <b>Tree</b> y <b>Logistic Regression</b> a <b>Test and Score</b> (validación cruzada).","Agrega <b>Confusion Matrix</b> y <b>Tree Viewer</b> para interpretar las reglas.","Compara exactitud y sensibilidad: prioriza detectar a quienes están en riesgo.","Usa el resultado solo como <b>alerta temprana</b>, con revisión humana, nunca para sancionar."],
+    prompt:"Flujo de widgets en Orange:\nFile ──► Data Table\n  │\n  ├──► Tree ─────────────┐\n  ├──► Logistic Regression ┼──► Test and Score ──► Confusion Matrix\n  └──► Random Forest ─────┘\nTree ──► Tree Viewer  (para ver las reglas: «si asistencia < 70 % y parcial < 11 → riesgo»)",
+    res:"Modelo interpretable de alerta temprana y una práctica completa de ML sin código."},
+   {t:"Entender una red neuronal con TensorFlow Playground",tool:"TensorFlow Playground",obj:"Explicar en clase qué son las capas, las neuronas, el aprendizaje y el sobreajuste.",
+    steps:["Abre playground.tensorflow.org y elige el conjunto de datos en espiral.","Empieza con 1 capa y 2 neuronas: pulsa ▶ y observa que no logra separar los datos.","Agrega capas y neuronas y observa cómo baja la pérdida (loss).","Sube el ruido y reduce los datos de entrenamiento para provocar sobreajuste.","Activa la regularización y compara la pérdida de entrenamiento con la de prueba.","Pide a los estudiantes explicar con sus palabras qué cambió y por qué."],
+    prompt:"Preguntas para la reflexión (puedes generar más con un LLM):\n1. ¿Por qué una sola neurona no puede separar la espiral?\n2. ¿Qué indica que la pérdida de prueba suba mientras la de entrenamiento baja?\n3. ¿Qué relación hay entre la cantidad de datos y el sobreajuste?\n4. ¿Cómo se parece esto a un modelo que clasifica solicitudes de estudiantes?",
+    res:"Comprensión intuitiva y visual del entrenamiento de una red neuronal."}
+  ]
+};
+
+/* ===== HERRAMIENTAS DEL PADLET: se distribuyen en las pestañas temáticas ===== */
+const PADLET_TOOLS=[
+ ["Kaiber","https://kaiber.ai","Crea imágenes y animaciones artísticas con IA.","frm","publicidad","Imagen generativa"],
+ ["Wepik","https://wepik.com","Crea imágenes a partir de textos y plantillas de diseño.","frm","publicidad","Imagen generativa"],
+ ["Playground","https://playground.com","Crea imágenes a partir de textos para redes sociales y marketing.","frm","publicidad","Imagen generativa"],
+ ["Clipdrop","https://clipdrop.co","Editor de imágenes: quitar fondos, mejorar y reiluminar.","frm","publicidad","Imagen generativa"],
+ ["Craiyon","https://www.craiyon.com","Generador gratuito de imágenes con IA.","free","publicidad","Imagen generativa"],
+ ["Magic Studio","https://magicstudio.com","Crea fotos y elimina objetos y fondos.","frm","publicidad","Imagen generativa"],
+ ["DALL·E (OpenAI)","https://openai.com/index/dall-e-2/","Generación de imágenes realistas (hoy integrada en ChatGPT).","frm","publicidad","Imagen generativa"],
+ ["Genmo","https://www.genmo.ai","Creación de videos con IA a partir de texto.","frm","publicidad","Edición y generación de video"],
+ ["Wan","https://wan.video","Plataforma de Alibaba Cloud para crear videos con IA.","frm","publicidad","Edición y generación de video"],
+ ["Kukarella","https://www.kukarella.com","Locución con IA en distintos tonos, con diálogos y transcripción.","frm","publicidad","Voz y música"],
+ ["Wispr Flow","https://wisprflow.ai","Dictado: hablas con naturalidad y transcribe y edita tu voz al instante.","frm","aprendizaje","Accesibilidad"],
+ ["Eightify","https://eightify.app","Extensión que resume videos de YouTube.","frm","alumnos","Tutoría y estudio"],
+ ["Sourcely","https://www.sourcely.net","Motor de búsqueda de fuentes y artículos académicos.","frm","alumnos","Búsqueda académica"],
+ ["Parafrasist","https://parafrasist.com","Parafrasea textos y crea cuestionarios a partir de ellos.","frm","alumnos","Redacción"],
+ ["TextCortex","https://textcortex.com","Mejora la redacción de los textos.","frm","alumnos","Redacción"],
+ ["Compose AI","https://www.compose.ai","Escritura automática en el correo y el navegador.","frm","alumnos","Redacción"],
+ ["ChatPDF","https://www.chatpdf.com","Sube un PDF y hazle preguntas.","frm","alumnos","PDF y documentos"],
+ ["LightPDF","https://lightpdf.com","Resume PDF, propone preguntas y edita documentos.","frm","alumnos","PDF y documentos"],
+ ["PopAI","https://www.popai.pro","Genera documentos y presentaciones, parafrasea y analiza PDFs.","frm","alumnos","PDF y documentos"],
+ ["ClassPoint","https://www.classpoint.io","Genera cuestionarios a partir de presentaciones de PowerPoint.","frm","docentes","Evaluación y retroalimentación"],
+ ["OpExams","https://www.opexams.com","Crea preguntas a partir de un texto.","frm","docentes","Evaluación y retroalimentación"],
+ ["Yippity","https://yippity.io","Convierte textos o páginas web en cuestionarios y tarjetas de estudio.","frm","docentes","Evaluación y retroalimentación"],
+ ["Chalkie","https://chalkie.ai","Genera clases y unidades didácticas completas a partir del tema y el curso.","frm","docentes","Creación de recursos"],
+ ["EdrawMax","https://www.edrawmax.com","Más de 280 tipos de diagramas: flujo, organigramas y mapas mentales.","frm","docentes","Presentaciones y visuales"],
+ ["Skywork","https://skywork.ai","Espacio de trabajo con superagentes para documentos, hojas y diapositivas.","frm","automatizacion","Constructores de agentes"],
+ ["UiPath / Automation Anywhere / Blue Prism","https://www.uipath.com","Automatización robótica de procesos de negocio (RPA) con IA.","pay","automatizacion","Plataformas de automatización"],
+ ["Blackbox AI","https://www.blackbox.ai","Asistente de programación: genera, explica y busca código.","frm","favoritos","Asistentes especializados"],
+ ["tl;dv","https://tldv.io","Graba, transcribe y resume reuniones de Meet, Zoom y Teams.","frm","conocimiento","Reuniones y captura"],
+ ["TeraBox","https://www.terabox.com","Nube con 1 TB gratuito (revisa su política de privacidad antes de subir datos sensibles).","frm","conocimiento","Almacenamiento"],
+ ["Smodin","https://smodin.io","Revisa la autenticidad de lo escrito. Los detectores dan falsos positivos: úsalos solo como alerta.","frm","errores","Usar con cautela"],
+ ["Clever Humanizer","https://cleverhumanizer.ai","Reescribe textos generados por IA. No debe usarse para ocultar el uso de IA en trabajos académicos.","free","errores","Usar con cautela"],
+ ["There's An AI For That","https://theresanaiforthat.com","Buscador de herramientas de IA por tarea.","free","recursos",""],
+ ["Future AI Lab","https://futureailab.com","Buscador de herramientas de IA para cada necesidad.","free","recursos",""],
+ ["YouMind","https://youmind.com","Biblioteca gratuita de prompts para imagen, video y web.","free","recursos",""],
+ ["URSULA (GPT de prompts educativos)","https://chatgpt.com/gpts","Bot de ChatGPT que ayuda a diseñar prompts educativos (búscalo en la tienda de GPTs).","frm","recursos",""]
+];
+/* Ya presentes en otras pestañas: RunwayML, Descript, QuillBot, Gamma, Perplexity, NotebookLM, Consensus, Litmaps,
+   Research Rabbit, Gemini, Qwen, Poe, LMArena, Teachable Machine y Experiments with Google. */
+const DIRS=[];
+function distributePadlet(){
+  PADLET_TOOLS.forEach(([n,u,d,pr,tab,cat])=>{
+    if(tab==="recursos"){DIRS.push([n,u,"Directorios y prompts",d,pr]);return}
+    const T=TOPICS[tab];if(!T)return;
+    if(T.tools.some(t=>norm(t[0])===norm(n)))return;
+    if(!T.cats.includes(cat))T.cats.push(cat);
+    T.tools.push([n,u,cat,d,pr]);
+  });
+}
+
+/* ===== MAPA DE HERRAMIENTAS (Inicio) ===== */
+/* item: [nombre, url] o [nombre, url|"", nota] ; concept:true = categoría conceptual */
+const MAP=[
+ {t:"IA para presentaciones",items:[["Gamma","https://gamma.app"],["Beautiful.ai","https://www.beautiful.ai"],["Pitch","https://pitch.com"],["Plus AI","https://plusdocs.com"],["PopAI","https://www.popai.pro"],["Presentations.AI","https://www.presentations.ai"],["Slidesgo AI","https://slidesgo.com/ai-presentations"],["Canva","https://www.canva.com"]]},
+ {t:"Chatbots de IA",items:[["ChatGPT","https://chatgpt.com"],["Claude","https://claude.ai"],["Gemini","https://gemini.google.com"],["DeepSeek","https://chat.deepseek.com"],["Grok","https://grok.com"],["Meta AI","https://www.meta.ai"],["MS Copilot","https://copilot.microsoft.com"],["Perplexity","https://www.perplexity.ai"],["Mistral Le Chat","https://chat.mistral.ai"],["Qwen","https://chat.qwen.ai"],["Kimi","https://www.kimi.com"]]},
+ {t:"Asistentes de correo",items:[["Gemini en Gmail","https://workspace.google.com/products/gmail/"],["Copilot en Outlook","https://www.microsoft.com/microsoft-365/copilot"],["Superhuman","https://superhuman.com"],["Shortwave","https://www.shortwave.com"],["MailMaestro","https://www.maestrolabs.com"],["Compose AI","https://www.compose.ai"]]},
+ {t:"Asistentes de programación",items:[["Claude Code","https://code.claude.com/docs/en/overview"],["GitHub Copilot","https://github.com/features/copilot"],["Cursor","https://cursor.com"],["OpenAI Codex","https://chatgpt.com/codex"],["Gemini CLI","https://github.com/google-gemini/gemini-cli"],["Windsurf","https://windsurf.com"],["Replit","https://replit.com"],["Qodo","https://www.qodo.ai"],["Tabnine","https://www.tabnine.com"],["AskCodi","https://www.askcodi.com"]]},
+ {t:"Hojas de cálculo con IA",items:[["Copilot en Excel","https://www.microsoft.com/microsoft-365/excel"],["Gemini en Sheets","https://workspace.google.com/products/sheets/"],["Claude for Excel","https://claude.ai"],["Rows","https://rows.com"],["Formula Bot","https://www.formulabot.com"],["Gigasheet","https://www.gigasheet.com"],["Bricks","https://www.thebricks.com"],["SheetAI","https://www.sheetai.app"]]},
+ {t:"Generación de imágenes",items:[["Nano Banana (Gemini)","https://gemini.google.com"],["Imágenes en ChatGPT","https://chatgpt.com"],["Adobe Firefly","https://firefly.adobe.com"],["Midjourney","https://www.midjourney.com"],["FLUX","https://bfl.ai"],["Ideogram","https://ideogram.ai"],["Recraft","https://www.recraft.ai"],["Leonardo.Ai","https://leonardo.ai"],["Stable Diffusion","https://stability.ai"]]},
+ {t:"Automatización de flujos",items:[["n8n","https://n8n.io"],["Make","https://www.make.com"],["Zapier","https://zapier.com"],["Power Automate","https://www.microsoft.com/power-platform/products/power-automate"],["Integrately","https://integrately.com"],["Monday.com","https://monday.com"],["Wrike","https://www.wrike.com"],["Activepieces","https://www.activepieces.com"]]},
+ {t:"Notas de reuniones",items:[["Otter","https://otter.ai"],["Fireflies","https://fireflies.ai"],["Fathom","https://fathom.video"],["tl;dv","https://tldv.io"],["Fellow","https://fellow.app"],["Avoma","https://www.avoma.com"],["Krisp","https://krisp.ai"]]},
+ {t:"Agenda y productividad",items:[["Motion","https://www.usemotion.com"],["Reclaim AI","https://reclaim.ai"],["Calendly","https://calendly.com"],["Taskade","https://www.taskade.com"],["Trevor AI","https://www.trevorai.com"],["Notion Calendar","https://www.notion.com/product/calendar"]]},
+ {t:"Diseño gráfico",items:[["Canva","https://www.canva.com"],["Microsoft Designer","https://designer.microsoft.com"],["Adobe Express","https://www.adobe.com/express/"],["Framer","https://www.framer.com"],["Uizard","https://uizard.io"],["Design.com","https://www.design.com"],["Looka","https://looka.com"]]},
+ {t:"Generación de video",items:[["Veo / Flow","https://labs.google/flow"],["Sora","https://sora.chatgpt.com"],["Runway","https://runwayml.com"],["Kling","https://klingai.com"],["Luma AI","https://lumalabs.ai"],["Pika","https://pika.art"],["Krea","https://www.krea.ai"],["LTX Studio","https://ltx.studio"],["HeyGen","https://www.heygen.com"],["Synthesia","https://www.synthesia.io"],["InVideo","https://invideo.io"]]},
+ {t:"Escritura con IA",items:[["Grammarly","https://www.grammarly.com"],["QuillBot","https://quillbot.com"],["DeepL Write","https://www.deepl.com/write"],["Jasper","https://www.jasper.ai"],["Copy.ai","https://www.copy.ai"],["Writesonic","https://writesonic.com"],["Rytr","https://rytr.me"],["Sudowrite","https://www.sudowrite.com"],["JotBot","https://myjotbot.com"]]},
+ {t:"Gestión del conocimiento",items:[["NotebookLM","https://notebooklm.google.com"],["Notion AI","https://www.notion.com/product/ai"],["Obsidian","https://obsidian.md"],["Guru","https://www.getguru.com"],["Tettra","https://tettra.com"],["Mem","https://mem.ai"],["Confluence + Rovo","https://www.atlassian.com/software/rovo"]]},
+ {t:"Visualización de datos",items:[["Julius AI","https://julius.ai"],["Power BI","https://www.microsoft.com/power-platform/products/power-bi"],["Looker Studio","https://lookerstudio.google.com"],["Tableau","https://www.tableau.com"],["Flourish","https://flourish.studio"],["Visme","https://www.visme.co"],["Napkin AI","https://www.napkin.ai"],["Datawrapper","https://www.datawrapper.de"]]},
+ {t:"Investigación académica",items:[["Consensus","https://consensus.app"],["Elicit","https://elicit.com"],["SciSpace","https://scispace.com"],["Scopus AI","https://www.elsevier.com/products/scopus/scopus-ai"],["Semantic Scholar","https://www.semanticscholar.org"],["ResearchRabbit","https://www.researchrabbit.ai"],["Litmaps","https://www.litmaps.com"],["Rayyan","https://www.rayyan.ai"],["Zotero","https://www.zotero.org"]]},
+ {t:"Gamificación educativa",items:[["Padlet Arcade","https://arcade.padlet.com"],["Kahoot!","https://kahoot.com"],["Wayground","https://wayground.com"],["Blooket","https://www.blooket.com"],["Gimkit","https://www.gimkit.com"],["Educaplay","https://www.educaplay.com"],["Wordwall","https://wordwall.net/es"],["Genially","https://genially.com"]]},
+ {t:"Tipos de MCP",concept:true,items:[
+   ["Cliente MCP","https://modelcontextprotocol.io","App que se conecta a servidores: Claude, ChatGPT, Gemini CLI, Cursor, LM Studio."],
+   ["Servidor MCP","https://modelcontextprotocol.io","Programa que expone datos y acciones de un servicio (Drive, GitHub, una base de datos)."],
+   ["Local (stdio)","https://modelcontextprotocol.io","Corre en tu computadora; ideal para archivos y datos privados."],
+   ["Remoto (HTTP)","https://modelcontextprotocol.io","Alojado en la nube con autenticación OAuth; así funcionan los conectores."],
+   ["Herramientas (tools)","https://modelcontextprotocol.io","Acciones que el modelo puede ejecutar: buscar, crear, enviar."],
+   ["Recursos (resources)","https://modelcontextprotocol.io","Datos de solo lectura que el modelo puede consultar: archivos, registros."],
+   ["Prompts","https://modelcontextprotocol.io","Plantillas reutilizables que ofrece el servidor."]]},
+ {t:"Servidores MCP populares",items:[
+   ["Servidores de referencia (Filesystem, Fetch, Git, Memory)","https://github.com/modelcontextprotocol/servers"],
+   ["GitHub MCP","https://github.com/github/github-mcp-server"],
+   ["Playwright MCP (navegador)","https://github.com/microsoft/playwright-mcp"],
+   ["Notion MCP","https://developers.notion.com/docs/mcp"],
+   ["Google Drive / Gmail (conectores)","https://claude.com/docs/extend/overview"],
+   ["Bases de datos (PostgreSQL, SQLite)","https://github.com/modelcontextprotocol/servers"],
+   ["Registro oficial de servidores MCP","https://registry.modelcontextprotocol.io"]]},
+ {t:"Tipos de bases de datos para IA",concept:true,items:[
+   ["Vectorial","https://www.pinecone.io/learn/vector-database/","Guarda embeddings y busca por similitud semántica (base del RAG)."],
+   ["Relacional + vectores","https://github.com/pgvector/pgvector","PostgreSQL con pgvector: tablas SQL y búsqueda semántica juntas."],
+   ["De grafos","https://neo4j.com","Nodos y relaciones (Neo4j); útil para GraphRAG y redes de citas."],
+   ["Documental","https://www.mongodb.com/products/platform/atlas-vector-search","JSON flexible con búsqueda vectorial (MongoDB Atlas)."],
+   ["Clave-valor / caché","https://redis.io","Memoria rápida de conversaciones y caché semántica (Redis)."],
+   ["Búsqueda híbrida","https://www.elastic.co/elasticsearch","Combina palabras clave (BM25) y vectores (Elasticsearch, OpenSearch)."],
+   ["Series de tiempo","https://www.timescale.com","Datos con marca temporal: sensores, logs y analítica de uso."]]},
+ {t:"Bases de datos vectoriales",items:[["Pinecone","https://www.pinecone.io"],["Qdrant","https://qdrant.tech"],["Weaviate","https://weaviate.io"],["Milvus","https://milvus.io"],["Chroma","https://www.trychroma.com"],["pgvector","https://github.com/pgvector/pgvector"],["LanceDB","https://lancedb.com"],["FAISS (librería)","https://github.com/facebookresearch/faiss"]]},
+ {t:"Modelos de embedding",items:[["OpenAI text-embedding-3","https://platform.openai.com/docs/guides/embeddings"],["Gemini Embedding","https://ai.google.dev/gemini-api/docs/embeddings"],["Cohere Embed","https://cohere.com/embed"],["Voyage AI","https://www.voyageai.com"],["Jina Embeddings","https://jina.ai/embeddings/"],["BGE-M3 (abierto)","https://huggingface.co/BAAI/bge-m3"],["Nomic Embed (abierto)","https://huggingface.co/nomic-ai/nomic-embed-text-v1.5"],["Ranking MTEB","https://huggingface.co/spaces/mteb/leaderboard"]]},
+ {t:"Estrategias de chunking",concept:true,items:[
+   ["Tamaño fijo con solapamiento","","Cortes de N tokens (p. ej., 500) con 10-20 % de solapamiento. Simple y rápido."],
+   ["Recursivo","","Divide por párrafos, luego oraciones y luego palabras hasta el tamaño deseado."],
+   ["Por estructura","","Respeta títulos, secciones, tablas o Markdown del documento (ideal para tesis y reglamentos)."],
+   ["Semántico","","Agrupa oraciones con significado similar usando embeddings."],
+   ["Jerárquico (padre-hijo)","","Busca en fragmentos pequeños y entrega al modelo el bloque mayor que los contiene."],
+   ["Agéntico","","Un LLM decide cómo dividir el texto según su contenido."]]},
+ {t:"Frameworks RAG y lectura de documentos",items:[["LangChain","https://www.langchain.com"],["LlamaIndex","https://www.llamaindex.ai"],["Haystack","https://haystack.deepset.ai"],["Docling (IBM)","https://github.com/docling-project/docling"],["Unstructured","https://unstructured.io"],["LlamaParse","https://www.llamaindex.ai/llamaparse"],["Chonkie","https://github.com/chonkie-inc/chonkie"],["RAGAS (evaluación)","https://docs.ragas.io"]]}
+];
+const RAG_FLOW=[["Documentos","PDF, tesis, reglamentos, web."],["Parsing","Extraer texto y tablas (Docling, Unstructured)."],["Chunking","Dividir en fragmentos con solapamiento."],["Embeddings","Convertir cada fragmento en un vector."],["BD vectorial","Guardar e indexar (Qdrant, pgvector, Chroma)."],["Recuperar y responder","Buscar los más similares y dárselos al LLM con citas."]];
+function mapHTML(){
+  return `<h2><span class="tag-sec">Mapa</span>Mapa de herramientas de IA por categoría</h2>
+  <p class="muted" style="margin-bottom:14px">${MAP.length} categorías y ${MAP.reduce((s,c)=>s+c.items.length,0)} entradas, incluidos los conceptos de MCP, bases de datos vectoriales, embeddings y chunking. Pulsa una herramienta para abrirla.</p>
+  <input class="search" type="search" id="mapSearch" placeholder="Buscar en el mapa (ej.: video, vectorial, MCP, Gemini)…" aria-label="Buscar en el mapa de herramientas" style="margin-bottom:18px">
+  <div class="aimap" id="aimap">${MAP.map(c=>`<section class="mapbox${c.concept?" concept":""}" data-q="${esc(norm(c.t))}">
+    <h3>${esc(c.t)}${c.concept?' <span class="ctag">concepto</span>':""}</h3>
+    <ul class="tree">${c.items.map(i=>{const [n,u,d]=i;const label=`<span class="mi" style="background:${colorFor(n)}" aria-hidden="true">${esc(initials(n).slice(0,1))}</span><span class="mn">${esc(n)}${d?`<small>${esc(d)}</small>`:""}</span>`;
+      return `<li data-q="${esc(norm(n+" "+(d||"")+" "+c.t))}">${u?`<a href="${esc(u)}" target="_blank" rel="noopener">${label}</a>`:`<span class="nolink">${label}</span>`}</li>`}).join("")}</ul>
+  </section>`).join("")}</div>
+  <p class="empty" id="mapEmpty" hidden>No hay coincidencias en el mapa.</p>
+  <h2><span class="tag-sec">Cómo encajan</span>Del documento a la respuesta: el flujo RAG</h2>
+  <p class="muted" style="margin-bottom:14px">Así se combinan el chunking, los embeddings y las bases de datos vectoriales para que un asistente responda con tus propios documentos.</p>
+  <div class="flow">${flowHTML(RAG_FLOW)}</div>`;
+}
+function filterMap(v){
+  const w=norm(v.trim()).split(/\s+/).filter(Boolean);let any=0;
+  document.querySelectorAll("#aimap .mapbox").forEach(b=>{
+    const titleHit=w.length&&w.every(x=>b.dataset.q.includes(x));let n=0;
+    b.querySelectorAll("li").forEach(li=>{const ok=!w.length||titleHit||w.every(x=>li.dataset.q.includes(x));li.hidden=!ok;if(ok)n++});
+    b.hidden=n===0;if(n)any++;
+  });
+  $("#mapEmpty").hidden=any>0;
+}
+
+const REFS=[
+ ["UNESCO: IA generativa en educación e investigación","https://www.unesco.org/es/articles/guia-para-el-uso-de-ia-generativa-en-educacion-e-investigacion","Guía","Orientaciones para el uso de la IA generativa en educación e investigación.","free"],
+ ["UNESCO: Marco de competencias en IA para docentes","https://www.unesco.org/en/articles/ai-competency-framework-teachers","Marco","Competencias en IA que todo docente debería desarrollar.","free"],
+ ["Reglamento de la Ley N.º 31814","https://www.gob.pe/institucion/pcm/normas-legales/7133522-115-2025-pcm","Norma","D. S. N.º 115-2025-PCM, marco peruano de la IA.","free"],
+ ["Declaración PRISMA 2020","https://www.prisma-statement.org","Guía","Estándar de reporte para revisiones sistemáticas.","free"],
+ ["COPE: Autoría y herramientas de IA","https://publicationethics.org/guidance/cope-position/authorship-and-ai-tools","Ética","Posición sobre el uso de IA en publicaciones científicas.","free"],
+ ["NIST AI Risk Management Framework","https://www.nist.gov/itl/ai-risk-management-framework","Marco","Gestión de riesgos de sistemas de IA.","free"]
+];
+
+const RISKS=[
+ ["Inaceptable / indebido","#8f2a12","Usos prohibidos: manipulación, vigilancia masiva o puntuación social. No se implementan."],
+ ["Alto riesgo","#8f5e12","Decisiones sobre admisión, calificación o acceso a la educación. Requieren supervisión humana, evaluación de impacto y transparencia."],
+ ["Riesgo limitado","#6b4610","Chatbots y contenido generado: hay que informar al usuario que interactúa con IA."],
+ ["Riesgo mínimo","#3b342a","Correctores, búsqueda o resúmenes de apoyo: buenas prácticas y alfabetización."]
+];
+
+/* ================= HELPERS ================= */
+const $=(s,c=document)=>c.querySelector(s);
+const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const PRICE={free:["Gratis","t-free"],frm:["Freemium","t-frm"],pay:["De pago","t-pay"],os:["Código abierto","t-os"]};
+const PALETTE=["#f5a623","#e8c07a","#d4881b","#f3d49a","#b0762a","#fbe8c4","#d98a1d","#c98a2e"];
+const colorFor=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))>>>0;return PALETTE[h%PALETTE.length]};
+const initials=n=>n.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ0-9 ]/g,"").split(" ").filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+
+function flowHTML(steps,color){
+  return steps.map((s,i)=>`${i?'<div class="arrow" aria-hidden="true">➜</div>':''}<div class="step"><span class="sn" style="background:${color||PALETTE[i%PALETTE.length]}">${i+1}</span><b>${esc(s[0])}</b><p>${esc(s[1])}</p></div>`).join("");
+}
+function toolCard(t){
+  const [name,url,cat,sum,pr]=t;const p=PRICE[pr]||PRICE.frm;
+  return `<article class="tool" data-cat="${esc(cat)}" data-q="${esc(norm(name+" "+cat+" "+sum+" "+p[0]))}">
+    <div class="th"><span class="av" style="background:${colorFor(name)}" aria-hidden="true">${esc(initials(name))}</span>
+    <div><h4>${esc(name)}</h4><div class="cat">${esc(cat)}</div></div></div>
+    <p>${esc(sum)}</p>
+    <div class="ft"><span class="tag ${p[1]}">${p[0]}</span><a class="go" href="${esc(url)}" target="_blank" rel="noopener">Abrir ↗</a></div></article>`;
+}
+
+/* ================= BUILD ================= */
+function buildTabs(){
+  $("#tablist").innerHTML=TABS.map(t=>`<button class="tab" role="tab" id="t-${t.id}" aria-controls="p-${t.id}" aria-selected="false" tabindex="-1" data-go="${t.id}">${t.label}</button>`).join("");
+}
+function buildTopics(){
+  let html="";
+  for(const [id,T] of Object.entries(TOPICS)){
+    html+=`<section class="panel" id="p-${id}" role="tabpanel" aria-labelledby="t-${id}"><div class="wrap">
+      <span class="tag-sec">${esc(TABS.find(x=>x.id===id).label)}</span>
+      <h1 style="margin-top:14px">${T.title}</h1>
+      <p class="lead">${esc(T.lead)}</p>
+      ${T.pre?T.pre():""}
+      ${T.theory?`<h2><span class="tag-sec">Teoría</span>Fundamentos teóricos</h2>
+      <div class="grid g4">${T.theory.map(x=>`<div class="card"><div class="ico" aria-hidden="true">${x[0]}</div><h3>${esc(x[1])}</h3><p class="muted small">${esc(x[2])}</p></div>`).join("")}</div>`:""}
+      ${T.flow?`<h2><span class="tag-sec">Gráfico de proceso</span>${esc((x=>x[0].toUpperCase()+x.slice(1))(T.flowTitle.replace(/^Proceso: /,"")))}</h2>
+      <div class="flow" role="list" aria-label="${esc(T.flowTitle)}">${flowHTML(T.flow)}</div>`:""}
+      ${T.mid?T.mid():""}
+      ${T.extra==="risk"?`<h2>Clasificación de riesgos de la IA (enfoque basado en riesgo)</h2>
+        <div class="risk">${RISKS.map(r=>`<div class="rk" style="background:linear-gradient(160deg,${r[1]}55,var(--card))"><h4>${r[0]}</h4><p>${r[2]}</p></div>`).join("")}</div>
+        <div class="callout warn"><b>Nota:</b> esta clasificación es didáctica y sigue el enfoque basado en riesgos del reglamento peruano y de la Ley de IA de la UE. Para su aplicación formal, consulta el texto oficial del D. S. N.º 115-2025-PCM.</div>
+        <h2>Niveles de uso de IA en evaluaciones (ejemplo para el sílabo)</h2>
+        <div class="tscroll"><table><thead><tr><th>Nivel</th><th>Uso permitido</th><th>Ejemplo</th></tr></thead><tbody>
+          <tr><td><b>0 · Sin IA</b></td><td>Trabajo totalmente individual.</td><td>Examen presencial, sustentación oral.</td></tr>
+          <tr><td><b>1 · Ideas</b></td><td>Lluvia de ideas y organización; el texto es propio.</td><td>Elegir el tema de un ensayo.</td></tr>
+          <tr><td><b>2 · Edición</b></td><td>Corrección de estilo y gramática de un texto propio.</td><td>Revisión con LanguageTool.</td></tr>
+          <tr><td><b>3 · Colaboración</b></td><td>Partes generadas con IA, revisadas y declaradas.</td><td>Borrador de código o de análisis de datos.</td></tr>
+          <tr><td><b>4 · IA plena</b></td><td>Uso libre de IA; se evalúa el criterio y la reflexión.</td><td>Proyecto de diseño de un asistente.</td></tr>
+        </tbody></table></div>`:""}
+      <h2><span class="tag-sec">Herramientas</span>${T.toolsTitle||"Herramientas de IA"}</h2>
+      <div class="toolbar">
+        <input class="search" type="search" placeholder="Buscar por nombre, uso o categoría (ej.: rúbrica, tesis, gratis)…" aria-label="Buscar herramientas en ${esc(TABS.find(x=>x.id===id).label)}" data-search="${id}">
+        <div class="chips" role="group" aria-label="Filtrar por categoría">
+          <button class="chip" aria-pressed="true" data-filter="${id}" data-cat="*">Todas <span class="cnt">${T.tools.length}</span></button>
+          ${T.cats.map(c=>`<button class="chip" aria-pressed="false" data-filter="${id}" data-cat="${esc(c)}">${esc(c)} <span class="cnt">${T.tools.filter(t=>t[2]===c).length}</span></button>`).join("")}
+        </div>
+        <div class="fstatus"><span aria-live="polite" id="status-${id}">Mostrando ${T.tools.length} de ${T.tools.length} herramientas</span><button class="reset" data-reset="${id}" hidden>Limpiar filtros</button></div>
+      </div>
+      <div class="tools" id="tools-${id}">${T.tools.map(toolCard).join("")}<p class="empty" hidden>No hay herramientas con ese criterio. Prueba otro término o pulsa «Limpiar filtros».</p></div>
+      ${T.demos?`      <h2><span class="tag-sec">Práctica</span>Demos guiadas paso a paso</h2>
+      <div class="demo" id="demo-${id}">
+        <div class="dsel" role="group" aria-label="Seleccionar demo">${T.demos.map((d,i)=>`<button class="chip" aria-pressed="${i===0}" data-demo="${id}" data-i="${i}">Demo ${i+1}: ${esc(d.t)}</button>`).join("")}</div>
+        <div class="demo-content"></div>
+      </div>
+`:""}
+      ${T.post?T.post():""}
+    </div></section>`;
+  }
+  $("#topicPanels").outerHTML=html;
+}
+function renderDemo(id,i){
+  const d=TOPICS[id].demos[i];const box=$(`#demo-${id} .demo-content`);
+  box.innerHTML=`<div class="demo-head"><div><h3>🎬 ${esc(d.t)}</h3><span class="pill">🛠️ ${esc(d.tool)}</span></div></div>
+   <p class="obj"><b>Objetivo:</b> ${esc(d.obj)}</p>
+   <div class="demo-body">
+     <div><div class="plabel">Instrucciones del proceso</div><ol class="steps-list">${d.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
+     <div><div class="plabel"><span>Prompt para copiar</span><button class="copy" data-copy>Copiar</button></div>
+       <div class="prompt">${esc(d.prompt)}</div>
+       <div class="result"><b>Resultado esperado:</b> ${esc(d.res)}</div></div>
+   </div>`;
+  document.querySelectorAll(`[data-demo="${id}"]`).forEach(b=>b.setAttribute("aria-pressed",b.dataset.i==i));
+}
+function buildStatic(){
+  $("[data-flow=general]").innerHTML=flowHTML(GENERAL_FLOW);
+  $("#mapWrap").innerHTML=mapHTML();
+  $("#profileCards").innerHTML=Object.entries(TOPICS).map(([id,T])=>`<a class="card link" href="#${id}" data-go="${id}"><div class="ico" aria-hidden="true">${T.ico}</div><h3>${T.title.replace(/<[^>]+>/g,"")}</h3><p class="muted small">${esc(T.lead.slice(0,130))}…</p><p class="small" style="margin-top:12px;color:var(--ac);font-weight:600;font-family:var(--font-mono);font-size:12px;letter-spacing:.04em">${T.tools.length} herramientas${T.demos?` · ${T.demos.length} demos`:""} →</p></a>`).join("");
+  const nt=new Set(Object.values(TOPICS).flatMap(T=>T.tools.map(t=>t[0]))).size;
+  $("#n-tools").textContent=nt+"+";
+  $("#n-areas").textContent=Object.keys(TOPICS).length;
+  $("#n-demos").textContent=Object.values(TOPICS).reduce((s,T)=>s+(T.demos||[]).length,0);
+}
+
+/* ================= ROUTING ================= */
+function show(id,focus){
+  if(!TABS.some(t=>t.id===id))id="inicio";
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id==="p-"+id));
+  document.querySelectorAll(".tab").forEach(t=>{const on=t.dataset.go===id;t.setAttribute("aria-selected",on);t.tabIndex=on?0:-1;if(on){const l=$("#tablist");l.scrollLeft=t.offsetLeft-l.clientWidth/2+t.offsetWidth/2}});
+  if(location.hash!=="#"+id)history.replaceState(null,"","#"+id);
+  window.scrollTo({top:0});
+  if(focus)$("#contenido").focus({preventScroll:true});
+  document.title=(TABS.find(t=>t.id===id).label)+" | IA para la Docencia Universitaria";
+}
+
+/* ================= EVENTS ================= */
+document.addEventListener("click",e=>{
+  const go=e.target.closest("[data-go]");
+  if(go){e.preventDefault();show(go.dataset.go,!go.classList.contains("tab"));return}
+  const f=e.target.closest("[data-filter]");
+  if(f){const id=f.dataset.filter;document.querySelectorAll(`[data-filter="${id}"]`).forEach(b=>b.setAttribute("aria-pressed",b===f));filter(id);return}
+  const lb=e.target.closest("[data-llm]");
+  if(lb){renderLLM(lb.dataset.llm);return}
+  const cl=e.target.closest("[data-copy-llm]");
+  if(cl){const txt=$("#llmBox .prompt").textContent;const done=()=>{cl.textContent="¡Copiado!";setTimeout(()=>cl.textContent="Copiar",1600)};
+    if(navigator.clipboard)navigator.clipboard.writeText(txt).then(done,()=>fallbackCopy(txt,done));else fallbackCopy(txt,done);return}
+  const r=e.target.closest("[data-reset]");
+  if(r){const id=r.dataset.reset;$(`[data-search="${id}"]`).value="";document.querySelectorAll(`[data-filter="${id}"]`).forEach(b=>b.setAttribute("aria-pressed",b.dataset.cat==="*"));filter(id);return}
+  const d=e.target.closest("[data-demo]");
+  if(d){renderDemo(d.dataset.demo,+d.dataset.i);return}
+  const c=e.target.closest("[data-copy]");
+  if(c){const txt=c.closest(".demo-body").querySelector(".prompt").textContent;
+    const done=()=>{c.textContent="¡Copiado!";setTimeout(()=>c.textContent="Copiar",1600)};
+    if(navigator.clipboard)navigator.clipboard.writeText(txt).then(done,()=>fallbackCopy(txt,done));else fallbackCopy(txt,done)}
+});
+function fallbackCopy(t,cb){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(e){}a.remove();cb()}
+document.addEventListener("input",e=>{if(e.target.dataset.search)filter(e.target.dataset.search);
+  if(e.target.id==="mapSearch")filterMap(e.target.value);
+  if(e.target.id==="errSearch"){const w=norm(e.target.value.trim()).split(/\s+/).filter(Boolean);document.querySelectorAll("#errGrid article").forEach(a=>a.hidden=!w.every(x=>a.dataset.q.includes(x)))}});
+function filter(id){
+  const inp=$(`[data-search="${id}"]`);const q=norm(inp.value.trim());
+  const active=$(`[data-filter="${id}"][aria-pressed="true"]`);const cat=active?active.dataset.cat:"*";
+  const words=q.split(/\s+/).filter(Boolean);
+  const all=document.querySelectorAll(`#tools-${id} .tool`);let n=0;
+  all.forEach(t=>{const ok=(cat==="*"||t.dataset.cat===cat)&&words.every(w=>t.dataset.q.includes(w));t.hidden=!ok;if(ok)n++});
+  $(`#tools-${id} .empty`).hidden=n>0;
+  $(`#status-${id}`).textContent=`Mostrando ${n} de ${all.length} herramientas`+(cat!=="*"?` · ${cat}`:"")+(q?` · «${inp.value.trim()}»`:"");
+  $(`[data-reset="${id}"]`).hidden=(cat==="*"&&!q);
+}
+$("#tablist").addEventListener("keydown",e=>{
+  const tabs=[...document.querySelectorAll(".tab")];const i=tabs.indexOf(document.activeElement);if(i<0)return;
+  let j=null;if(e.key==="ArrowRight")j=(i+1)%tabs.length;if(e.key==="ArrowLeft")j=(i-1+tabs.length)%tabs.length;if(e.key==="Home")j=0;if(e.key==="End")j=tabs.length-1;
+  if(j!==null){e.preventDefault();tabs[j].focus();show(tabs[j].dataset.go)}
+});
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
+const tt=$("#totop");window.addEventListener("scroll",()=>{tt.style.display=scrollY>600?"block":"none"});tt.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+
+/* ================= INIT ================= */
+distributePadlet();
+buildTabs();buildTopics();buildStatic();
+Object.keys(TOPICS).forEach(id=>{if(TOPICS[id].demos)renderDemo(id,0)});
+renderLLM("claude");
+show(location.hash.slice(1)||"inicio");
+</script>
 </body>
 </html>
